@@ -13,7 +13,7 @@ class Booking(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('Cash', 'Cash'),
         ('Esewa', 'Esewa'),
-        ('Khalti', 'Khalti'),
+        # ('Khalti', 'Khalti'),
     ]
     
     PAYMENT_STATUS_CHOICES = [
