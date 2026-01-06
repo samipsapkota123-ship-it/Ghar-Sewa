@@ -125,8 +125,10 @@
                                         <span class="badge bg-warning">{{ booking.status }}</span>
                                     {% elif booking.status == 'Accepted' %}
                                         <span class="badge bg-info">{{ booking.status }}</span>
-                                    {% else %}
+                                    {% elif booking.status == 'Completed'%}
                                         <span class="badge bg-success">{{ booking.status }}</span>
+                                    {% else %}
+                                       <span class="badge bg-secondary">{{ booking.status }}</span>
                                     {% endif %}
                                 </td>
                             </tr>
