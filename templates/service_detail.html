@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <!-- Service Details -->
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-briefcase"></i> Service Details</h4>
+            </div>
+            <div class="card-body">
+                <h3 class="mb-3">{{ service.name }}</h3>
+                <div class="mb-3">
+                    <span class="badge bg-primary fs-6">{{ service.category }}</span>
+                </div>
+                <div class="mb-4">
+                    <h2 class="text-success mb-0">₹{{ service.price }}</h2>
+                    <small class="text-muted">Service Fee</small>
+                </div>
+                {% if not service.is_available %}
+                <div class="alert alert-warning mb-3">
+                    <i class="bi bi-exclamation-triangle"></i> This service is currently not available.
+                </div>
+                {% endif %}
+                <div class="d-grid gap-2">
+                    {% if user.is_authenticated %}
+                        {% if service.is_available %}
+                        <a href="{% url 'book_service' service.id %}" class="btn btn-success btn-lg">
+                            <i class="bi bi-calendar-check"></i> Book This Service
+                        </a>
+                        {% else %}
+                        <button class="btn btn-secondary btn-lg" disabled>
+                            <i class="bi bi-x-circle"></i> Service Not Available
+                        </button>
+                        {% endif %}
+                    {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-success btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Login to Book
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'services' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Provider Information -->
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Service Provider</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    {% if provider.profile_picture %}
+                        <img src="{{ provider.profile_picture.url }}" alt="Provider Picture" 
+                             class="rounded-circle border border-3 border-info shadow" 
+                             style="width: 100px; height: 100px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center border border-3 border-info shadow" 
+                             style="width: 100px; height: 100px; font-size: 2.5rem;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <h5 class="text-center mb-1">{{ provider.username }}</h5>
+                {% if provider.first_name or provider.last_name %}
+                <p class="text-center text-muted mb-3">
+                    {{ provider.first_name }} {{ provider.last_name }}
+                </p>
+                {% endif %}
+                {% if provider.email %}
+                <p class="text-center mb-2">
+                    <i class="bi bi-envelope"></i> {{ provider.email }}
+                </p>
+                {% endif %}
+                {% if provider.phone_number %}
+                <p class="text-center mb-3">
+                    <i class="bi bi-telephone"></i> {{ provider.phone_number }}
+                </p>
+                {% endif %}
+                
+                <hr>
+                
+                <div class="mb-3">
+                    <h6><i class="bi bi-briefcase"></i> Provider Statistics</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Services Offered:</strong> 
+                            <span class="badge bg-primary">{{ provider_services.count }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Total Bookings:</strong> 
+                            <span class="badge bg-info">{{ total_bookings }}</span>
+                        </li>
+                        <li class="mb-2">
+                            <strong>Completed:</strong> 
+                            <span class="badge bg-success">{{ completed_bookings }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other Services by This Provider -->
+        {% if provider_services.count > 1 %}
+        <div class="card shadow">
+            <div class="card-header bg-secondary text-white">
+                <h6 class="mb-0"><i class="bi bi-list-ul"></i> Other Services</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for other_service in provider_services %}
+                        {% if other_service.id != service.id %}
+                        <a href="{% url 'service_detail' other_service.id %}" 
+                           class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ other_service.name }}</strong>
+                                    <br><small class="text-muted">{{ other_service.category }}</small>
+                                </div>
+                                <span class="badge bg-success">₹{{ other_service.price }}</span>
+                            </div>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

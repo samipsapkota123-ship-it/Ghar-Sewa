@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="bi bi-calendar-check"></i> My Bookings</h2>
+        <p class="text-muted mb-0">View all your service bookings</p>
+    </div>
+</div>
+
+{% if bookings %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">All Bookings ({{ bookings.count }})</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service</th>
+                        <th>Provider</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Payment Method</th>
+                        <th>Payment Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td><strong>#{{ b.id }}</strong></td>
+
+                        <td>{{ b.service.name }}</td>
+
+                        <td>
+                            {{ b.service.provider.username }}
+                            {% if b.service.provider.phone_number %}
+                            <br>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if b.phone_number %}
+                                <i class="bi bi-telephone"></i> {{ b.phone_number }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ b.date|date:"M d, Y" }}</td>
+                        <td>{{ b.time|time:"g:i A" }}</td>
+
+                        <td>
+                            {% if b.address %}
+                                <small>{{ b.address|truncatewords:10 }}</small>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Booking Status -->
+                        <td>
+                            {% if b.status == 'Pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif b.status == 'Accepted' %}
+                                <span class="badge bg-info">Accepted</span>
+                            {% elif b.status == 'Completed' %}
+                                <span class="badge bg-success">Completed</span>
+                            {% elif b.status == 'Not Available' %}
+                                <span class="badge bg-danger">Not Available</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">{{ b.payment_method }}</span>
+                        </td>
+
+                        <!-- Payment Status -->
+                        <td>
+                            {% if b.status == 'Not Available' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% elif b.status == 'Accepted' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif b.payment_status == 'Paid' or b.payment_status == 'Received' %}
+                                <span class="badge bg-success">Paid</span>
+                            {% elif b.payment_status == 'Pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif b.payment_status == 'Cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% else %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <strong class="text-success">Rs. {{ b.service.price }}</strong>
+                        </td>
+
+                        <!-- Actions -->
+                        <td>
+                            {% if b.status == 'Not Available' %}
+                                <span class="text-danger small">
+                                    <i class="bi bi-x-circle"></i>  Cancelled
+                                </span>
+
+                            {% elif b.payment_status == 'Pending' %}
+                                <a href="{% url 'make_payment' b.id %}" class="btn btn-sm btn-success">
+                                    <i class="bi bi-credit-card"></i> Make Payment
+                                </a>
+
+                            {% elif b.payment_status == 'Paid' %}
+                                <span class="text-success small">
+                                    <i class="bi bi-check-circle"></i> Payment Completed
+                                </span>
+
+                            {% elif b.payment_status == 'Received' %}
+                                <span class="text-success small">
+                                    <i class="bi bi-check-circle"></i> Payment Received
+                                </span>
+
+                            {% else %}
+                                <span class="text-muted small">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> You have no bookings yet.
+</div>
+{% endif %}
+
+{% endblock %}

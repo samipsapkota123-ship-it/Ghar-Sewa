@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow">
+      <div class="card-body">
+        <h3 class="card-title mb-4">Make Payment</h3>
+        
+        <div class="mb-4">
+          <h5>Booking Details</h5>
+          <table class="table table-bordered">
+            <tr>
+              <th>Booking ID</th>
+              <td>#{{ booking.id }}</td>
+            </tr>
+            <tr>
+              <th>Service</th>
+              <td>{{ booking.service.name }}</td>
+            </tr>
+            <tr>
+              <th>Provider</th>
+              <td>{{ booking.service.provider.username }}</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td>{{ booking.date|date:"M d, Y" }}</td>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <td>{{ booking.time|time:"g:i A" }}</td>
+            </tr>
+            <tr>
+              <th>Payment Method</th>
+              <td><span class="badge bg-secondary">{{ booking.payment_method }}</span></td>
+            </tr>
+            <tr class="table-success">
+              <th>Amount to Pay</th>
+              <td><strong class="h5">Rs.{{ booking.service.price }}</strong></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="alert alert-info">
+          <i class="bi bi-info-circle"></i>
+          <strong>Payment Instructions:</strong>
+          <ul class="mb-0 mt-2">
+            {% if booking.payment_method == 'Cash' %}
+              <li>Please have the exact amount ready when the service provider arrives.</li>
+              <li>Payment will be collected at the time of service delivery.</li>
+            {% elif booking.payment_method == 'Esewa' %}
+              <li>Please complete the payment through your eSewa account.</li>
+              <li>After payment, click "Confirm Payment" below.</li>
+            {% elif booking.payment_method == 'Khalti' %}
+              <li>Please complete the payment through your Khalti account.</li>
+              <li>After payment, click "Confirm Payment" below.</li>
+            {% else %}
+              <li>Please complete the payment using your selected payment method.</li>
+              <li>After payment, click "Confirm Payment" below.</li>
+            {% endif %}
+          </ul>
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success btn-lg" 
+                    onclick="return confirm('Confirm that you have made the payment of RS.{{ booking.service.price }}?')">
+              <i class="bi bi-check-circle"></i> Confirm Payment
+            </button>
+            <a href="{% url 'my_bookings' %}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

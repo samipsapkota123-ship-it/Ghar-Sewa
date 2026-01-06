@@ -1,0 +1,89 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="bi bi-person"></i> Customer Management</h2>
+        <p class="text-muted mb-0">View and manage all customer accounts</p>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <label for="search" class="form-label">Search Customers</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ search_query }}" placeholder="Search by username or email...">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
+        {% if search_query %}
+        <div class="mt-2">
+            <a href="{% url 'dashboard_view_customers' %}" class="btn btn-sm btn-outline-secondary">Clear Search</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Customers Table -->
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">All Customers ({{ customers.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if customers %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Date Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.id }}</td>
+                        <td><strong>{{ customer.username }}</strong></td>
+                        <td>{{ customer.email|default:"N/A" }}</td>
+                        <td>{{ customer.first_name|default:"-" }}</td>
+                        <td>{{ customer.last_name|default:"-" }}</td>
+                        <td>{{ customer.date_joined|date:"M d, Y" }}</td>
+                        <td>
+                            {% if not customer.is_superuser %}
+                            <form method="post" action="{% url 'dashboard_delete_user' customer.id %}" 
+                                  onsubmit="return confirm('Are you sure you want to delete customer {{ customer.username }}?');" 
+                                  class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                            {% else %}
+                            <span class="text-muted">Protected</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> No customers found matching your criteria.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

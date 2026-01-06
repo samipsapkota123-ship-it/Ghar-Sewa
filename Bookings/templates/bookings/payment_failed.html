@@ -1,0 +1,29 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %} 
+Payment Failed 
+{%endblock %} 
+
+{% block content %}
+<div class="container-fluid " >
+  <div class="d-flex justify-content-center align-items-center full-height">
+    
+    <div class="col-md-5">
+      <div class="alert alert-danger text-center shadow-lg p-4 rounded">
+        
+        <h3 class="mb-3"> Payment Failed!!</h3>
+        <p class="mb-4">
+          Your payment could not be completed or was cancelled.
+          Please try again.
+        </p>
+
+        <a href="{% url 'my_bookings' %}" class="btn btn-primary">
+          Go Back to My Bookings
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

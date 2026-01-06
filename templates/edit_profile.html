@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-pencil"></i> Edit Profile</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Profile Picture -->
+                    <div class="mb-4 text-center">
+                        <label class="form-label fw-bold">Profile Picture</label>
+                        <div class="mb-3">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="Current Picture" 
+                                     class="rounded-circle border border-3 border-primary shadow mb-2" 
+                                     id="current-picture"
+                                     style="width: 150px; height: 150px; object-fit: cover; display: block; margin: 0 auto;">
+                            {% else %}
+                                <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2 border border-3 border-primary shadow" 
+                                     id="current-picture"
+                                     style="width: 150px; height: 150px; font-size: 3rem;">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(this)">
+                        <div class="form-text">Upload a new profile picture (JPG, PNG, GIF - Max 5MB)</div>
+                        <div id="image-preview" class="mt-2" style="display: none;">
+                            <small class="text-muted">Preview:</small>
+                            <img id="preview-img" class="rounded-circle border border-2 mt-1" style="width: 100px; height: 100px; object-fit: cover;">
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Personal Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" 
+                                   value="{{ user.first_name }}" placeholder="Enter your first name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" 
+                                   value="{{ user.last_name }}" placeholder="Enter your last name">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" value="{{ user.username }}" disabled>
+                        <div class="form-text">Username cannot be changed</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ user.email }}" required placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone_number" name="phone_number" 
+                               value="{{ user.phone_number }}" placeholder="Enter your phone number">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" 
+                                  placeholder="Enter your address">{{ user.address }}</textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    const currentPicture = document.getElementById('current-picture');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+            if (currentPicture) {
+                currentPicture.style.display = 'none';
+            }
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+        if (currentPicture) {
+            currentPicture.style.display = 'block';
+        }
+    }
+}
+</script>
+{% endblock %}
+

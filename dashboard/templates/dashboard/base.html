@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Home Service Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-primary px-4 py-3">
+    <a class="navbar-brand fw-bold" href="{% url 'dashboard_home' %}">
+        <i class="bi bi-speedometer2"></i> Admin Dashboard
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <span class="text-white me-3 d-none d-md-inline">
+                <i class="bi bi-person-circle"></i> {{ user.username }}
+            </span>
+            <a href="/" class="btn btn-light me-2" title="Go to Home Page">
+                <i class="bi bi-house-door"></i> <span class="d-none d-md-inline">Home</span>
+            </a>
+            <a href="{% url 'logout' %}" class="btn btn-danger">
+                <i class="bi bi-box-arrow-right"></i> <span class="d-none d-md-inline">Logout</span>
+            </a>
+        {% else %}
+            <a href="/accounts/login/" class="btn btn-light me-2">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+            <a href="/accounts/register/" class="btn btn-warning">
+                <i class="bi bi-person-plus"></i> Register
+            </a>
+        {% endif %}
+    </div>
+</nav>
+{% include 'dashboard/partials/sidebar.html' %}
+
+<!-- Main Content -->
+<div class="main-content flex-grow-1">
+    <div class="content-wrapper">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% include 'dashboard/partials/mobile_sidebar.html' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

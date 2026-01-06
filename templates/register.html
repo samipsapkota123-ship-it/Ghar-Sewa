@@ -1,0 +1,236 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">Create Account</h2>
+
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %} {% endif %} {% if error %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'register' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              required
+              autofocus
+              minlength="3"
+              maxlength="150"
+            />
+            <div class="form-text">
+              Required. 3-150 characters. Letters, digits and @/./+/-/_ only.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+              minlength="8"
+            />
+            <div class="form-text">
+              Your password must contain at least 8 characters.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="first_name"
+                name="first_name"
+                placeholder="Enter your first name"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="last_name"
+                name="last_name"
+                placeholder="Enter your last name"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+            />
+            <div class="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="role" class="form-label">I want to</label>
+            <select
+              class="form-select"
+              id="role"
+              name="role"
+              required
+              onchange="toggleServiceFields()"
+            >
+              <option value="">Select your role...</option>
+              <option value="customer">Book Services (Customer)</option>
+              <option value="provider">
+                Provide Services (Service Provider)
+              </option>
+            </select>
+          </div>
+
+          <!-- Service Provider Fields -->
+          <div id="providerFields" style="display: none">
+            <hr class="my-4" />
+            <h5 class="mb-3">Add Your Services</h5>
+            <p class="text-muted small">
+              Add at least one service you want to provide. You can add more
+              later.
+            </p>
+
+            <div id="servicesContainer">
+              <div class="service-item mb-3 p-3 border rounded">
+                <div class="row g-3">
+                  <div class="col-md-5">
+                    <label class="form-label">Service Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="service_name"
+                      placeholder="e.g., Pipe Repair, AC Installation"
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" name="service_category">
+                      <option value="">Select category...</option>
+                      {% for value, label in categories %}
+                      <option value="{{ value }}">{{ label }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Service Fee</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="service_price"
+                      placeholder="0"
+                      min="1"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              onclick="addServiceField()"
+            >
+              <i class="bi bi-plus-circle"></i> Add Another Service
+            </button>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">
+              Register
+            </button>
+          </div>
+        </form>
+
+        <div class="text-center mt-3">
+          <p class="mb-0">
+            Already have an account? <a href="{% url 'login' %}">Login here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleServiceFields() {
+    const role = document.getElementById("role").value;
+    const providerFields = document.getElementById("providerFields");
+
+    if (role === "provider") {
+      providerFields.style.display = "block";
+    } else {
+      providerFields.style.display = "none";
+    }
+  }
+
+  function addServiceField() {
+    const container = document.getElementById("servicesContainer");
+    const serviceItem = document.createElement("div");
+    serviceItem.className = "service-item mb-3 p-3 border rounded";
+
+    // Get categories from the first select element
+    const firstSelect = document.querySelector(
+      'select[name="service_category"]'
+    );
+    let categoryOptions = '<option value="">Select category...</option>';
+    if (firstSelect) {
+      Array.from(firstSelect.options).forEach(function (option) {
+        if (option.value) {
+          categoryOptions +=
+            '<option value="' + option.value + '">' + option.text + "</option>";
+        }
+      });
+    }
+
+    serviceItem.innerHTML =
+      '<div class="row g-3">' +
+      '<div class="col-md-5">' +
+      '<label class="form-label">Service Name</label>' +
+      '<input type="text" class="form-control" name="service_name" ' +
+      'placeholder="e.g., Pipe Repair, AC Installation">' +
+      "</div>" +
+      '<div class="col-md-4">' +
+      '<label class="form-label">Category</label>' +
+      '<select class="form-select" name="service_category">' +
+      categoryOptions +
+      "</select>" +
+      "</div>" +
+      '<div class="col-md-2">' +
+      '<label class="form-label">Service Fee (RS)</label>' +
+      '<input type="number" class="form-control" name="service_price" ' +
+      'placeholder="0" min="1">' +
+      "</div>" +
+      '<div class="col-md-1 d-flex align-items-end">' +
+      '<button type="button" class="btn btn-danger btn-sm" onclick="removeServiceField(this)">' +
+      '<i class="bi bi-trash"></i>' +
+      "</button>" +
+      "</div>" +
+      "</div>";
+
+    container.appendChild(serviceItem);
+  }
+
+  function removeServiceField(button) {
+    const serviceItem = button.closest(".service-item");
+    serviceItem.remove();
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="bi bi-calendar-check"></i> Booking Management</h2>
+        <p class="text-muted mb-0">Manage all bookings and their status</p>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-6">
+                <label for="search" class="form-label">Search Bookings</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ search_query }}" placeholder="Search by customer or service name...">
+            </div>
+            <div class="col-md-4">
+                <label for="status" class="form-label">Filter by Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    {% for status_code, status_name in status_choices %}
+                    <option value="{{ status_code }}" {% if status_filter == status_code %}selected{% endif %}>
+                        {{ status_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+        </form>
+        {% if search_query or status_filter %}
+        <div class="mt-2">
+            <a href="{% url 'dashboard_bookings' %}" class="btn btn-sm btn-outline-secondary">Clear Filters</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Bookings Table -->
+<div class="card shadow-sm">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">All Bookings ({{ bookings.count }})</h5>
+    </div>
+    <div class="card-body">
+        {% if bookings %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Service</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Payment Method</th>
+                        <th>Payment Status</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td><strong>#{{ booking.id }}</strong></td>
+                        <td>
+                            <a href="{% url 'dashboard_users' %}?search={{ booking.customer.username }}" 
+                               class="text-decoration-none">
+                                {{ booking.customer.username }}
+                            </a>
+                        </td>
+                        <td>{{ booking.service.name }}</td>
+                        <td>
+                            <span class="badge bg-secondary">{{ booking.service.category }}</span>
+                        </td>
+                        <td>{{ booking.date|date:"M d, Y" }}</td>
+                        <td>{{ booking.time|time:"g:i A" }}</td>
+                        <td>
+                            {% if booking.status == 'Pending' %}
+                                <span class="badge bg-warning">{{ booking.status }}</span>
+                            {% elif booking.status == 'Accepted' %}
+                                <span class="badge bg-info">{{ booking.status }}</span>
+                            {% elif booking.status == 'Completed' %}
+                                <span class="badge bg-success">{{ booking.status }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ booking.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td><span class="badge bg-secondary">{{ booking.payment_method }}</span></td>
+                        <td>
+                            {% if booking.payment_status == 'Received' %}
+                                <span class="badge bg-success">Received</span>
+                            {% elif booking.payment_status == 'Paid' %}
+                                <span class="badge bg-success">Paid</span>
+                            {% elif booking.payment_status == 'Pending' %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif booking.payment_status == 'Cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ booking.payment_status }}</span>
+                            {% endif %}
+                        </td>
+                        <td><strong class="text-success">₹{{ booking.service.price }}</strong></td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <!-- Status Update Dropdown -->
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" 
+                                            id="statusDropdown{{ booking.id }}" data-bs-toggle="dropdown" 
+                                            aria-expanded="false">
+                                        <i class="bi bi-pencil"></i> Status
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="statusDropdown{{ booking.id }}">
+                                        {% for status_code, status_name in status_choices %}
+                                        <li>
+                                            <form method="post" action="{% url 'dashboard_update_booking_status' booking.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="status" value="{{ status_code }}">
+                                                <button type="submit" class="dropdown-item {% if booking.status == status_code %}active{% endif %}">
+                                                    {{ status_name }}
+                                                </button>
+                                            </form>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <!-- Delete Button -->
+                                <form method="post" action="{% url 'dashboard_delete_booking' booking.id %}" 
+                                      onsubmit="return confirm('Are you sure you want to delete booking #{{ booking.id }}?');" 
+                                      class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> No bookings found matching your criteria.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

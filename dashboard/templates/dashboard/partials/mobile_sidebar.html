@@ -1,0 +1,118 @@
+<!-- Mobile Sidebar Toggle -->
+<button
+  class="btn btn-primary d-lg-none position-fixed"
+  style="
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+  "
+  data-bs-toggle="offcanvas"
+  data-bs-target="#mobileSidebar"
+>
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Mobile Sidebar -->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="mobileSidebar"
+  style="width: 250px"
+>
+  <div class="offcanvas-header bg-primary text-white">
+    <h5 class="offcanvas-title">Menu</h5>
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="sidebar pt-3" style="position: relative; top: 0">
+      <div class="pt-3">
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <a
+            href="{% url 'dashboard_home' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_home' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Management</div>
+          <a
+            href="{% url 'dashboard_users' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_users' or request.resolver_match.url_name == 'dashboard_delete_user' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-people"></i> Users
+          </a>
+          <a
+            href="{% url 'dashboard_services' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_services' or request.resolver_match.url_name == 'dashboard_delete_service' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-briefcase"></i> Services
+          </a>
+          <a
+            href="{% url 'dashboard_bookings' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_bookings' or request.resolver_match.url_name == 'dashboard_update_booking_status' or request.resolver_match.url_name == 'dashboard_delete_booking' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-calendar-check"></i> Bookings
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Quick Actions</div>
+          <a
+            href="{% url 'dashboard_view_customers' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_view_customers' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-person"></i> View Customers
+          </a>
+          <a
+            href="{% url 'dashboard_view_providers' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_view_providers' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-person-badge"></i> View Providers
+          </a>
+          <a
+            href="{% url 'dashboard_pending_bookings' %}"
+            class="nav-link {% if request.resolver_match.url_name == 'dashboard_pending_bookings' %}active{% endif %}"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-clock-history"></i> Pending Bookings
+          </a>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">System</div>
+          <a
+            href="/admin/"
+            class="nav-link"
+            target="_blank"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-gear"></i> Django Admin
+          </a>
+          <a
+            href="{% url 'logout' %}"
+            class="nav-link"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

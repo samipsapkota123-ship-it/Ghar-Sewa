@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow">
+      <div class="card-body">
+        <h3 class="card-title mb-4">Book {{ service.name }}</h3>
+        
+        <!-- Provider Information -->
+        <div class="card border-info mb-4">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="me-3">
+                {% if service.provider.profile_picture %}
+                  <img src="{{ service.provider.profile_picture.url }}" alt="Provider Picture" 
+                       class="rounded-circle border border-2 border-info" 
+                       style="width: 60px; height: 60px; object-fit: cover;">
+                {% else %}
+                  <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                       style="width: 60px; height: 60px; font-size: 1.5rem;">
+                    <i class="bi bi-person"></i>
+                  </div>
+                {% endif %}
+              </div>
+              <div>
+                <h6 class="mb-0">{{ service.provider.username }}</h6>
+                {% if service.provider.first_name or service.provider.last_name %}
+                  <small class="text-muted">{{ service.provider.first_name }} {{ service.provider.last_name }}</small>
+                {% endif %}
+                {% if service.provider.phone_number %}
+                  <br><small class="text-muted"><i class="bi bi-telephone"></i> {{ service.provider.phone_number }}</small>
+                {% endif %}
+                <br><small class="text-muted"><i class="bi bi-briefcase"></i> Service Provider</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {% if not service.is_available %}
+        <div class="alert alert-warning">
+          <i class="bi bi-exclamation-triangle"></i> This service is currently not available.
+        </div>
+        {% endif %}
+        
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" name="date" id="date" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="time" class="form-label">Time</label>
+            <input type="time" name="time" id="time" required class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="phone_number" class="form-label">Your Phone Number <span class="text-danger">*</span></label>
+            <input type="tel" name="phone_number" id="phone_number" required class="form-control" 
+                   placeholder="Enter your phone number" value="{{ user.phone_number|default:'' }}">
+            <div class="form-text">This will be shared with the service provider for coordination.</div>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Service Address</label>
+            <textarea 
+              name="address" 
+              id="address" 
+              class="form-control" 
+              rows="4" 
+              required 
+              placeholder="Enter the complete address where the service should be provided"
+            ></textarea>
+            <div class="form-text">
+              Please provide the complete address including street, city, and any landmarks.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="payment_method" class="form-label">Payment Method</label>
+            <select name="payment_method" id="payment_method" class="form-select" required>
+              <option value="Cash">Cash</option>
+              <option value="Esewa">Esewa</option>
+              <option value="Khalti">Khalti</option>
+            </select>
+            <div class="form-text">
+              Select your preferred payment method. Payment will be collected at the time of service.
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <strong>Service Fee: Rs.{{ service.price }}</strong><br>
+            <small>Payment will be collected at the time of service delivery.</small>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg" {% if not service.is_available %}disabled{% endif %}>
+              {% if service.is_available %}Confirm Booking{% else %}Service Not Available{% endif %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
