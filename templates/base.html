@@ -7,10 +7,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-  .full-height {
-    min-height: calc(100vh - 80px);
-  }
-</style>
+      html, body {
+        overflow-x: hidden;
+      }
+      .full-height {
+        min-height: calc(100vh - 80px);
+      }
+      .content-wrapper {
+        padding-top: 50px;
+      }
+      .content-wrapper.with-footer {
+        padding-bottom: 180px;
+        min-height: calc(100vh - 80px);
+      }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-dark bg-primary px-3  fixed-top">
@@ -47,7 +57,7 @@
         {% endif %}
     </div>
 </nav>
-<div class="container mt-4" style="padding-top: 50px;">
+<div class="container mt-4 content-wrapper">
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -58,6 +68,11 @@
     {% endif %}
     {% block content %}{% endblock %}
 </div>
+
+{% if request.resolver_match.url_name != 'profile' and request.resolver_match.url_name != 'edit_profile' and request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'register' and request.resolver_match.url_name != 'plumbing_providers' and request.resolver_match.url_name != 'electrical_providers' and request.resolver_match.url_name != 'cleaning_providers' and request.resolver_match.url_name != 'painting_providers' and request.resolver_match.url_name != 'appliance_repair_providers' and request.resolver_match.url_name != 'handyman_providers' and request.resolver_match.url_name != 'book_service' %}
+{% include 'partials_footer.html' %}
+{% endif %}
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

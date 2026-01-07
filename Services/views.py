@@ -157,3 +157,109 @@ def toggle_service_availability(request, service_id):
     messages.success(request, f'Service "{service.name}" is now {status}.')
     
     return redirect('provider_bookings')
+
+
+def plumbing_services(request):
+    """Display plumbing services page"""
+    return render(request, 'services/plumbing.html')
+
+
+def electrical_services(request):
+    """Display electrical services page"""
+    return render(request, 'services/electrical.html')
+
+
+def cleaning_services(request):
+    """Display cleaning services page"""
+    return render(request, 'services/cleaning.html')
+
+
+def painting_services(request):
+    """Display painting services page"""
+    return render(request, 'services/painting.html')
+
+
+def appliance_repair_services(request):
+    """Display appliance repair services page"""
+    return render(request, 'services/appliance_repair.html')
+
+
+def handyman_services(request):
+    """Display handyman services page"""
+    return render(request, 'services/handyman.html')
+
+
+def plumbing_providers(request):
+    """Display plumbing service providers"""
+    return get_category_providers(request, 'Plumbing', 'services/providers/plumbing_providers.html')
+
+
+def electrical_providers(request):
+    """Display electrical service providers"""
+    return get_category_providers(request, 'Electrical', 'services/providers/electrical_providers.html')
+
+
+def cleaning_providers(request):
+    """Display cleaning service providers"""
+    return get_category_providers(request, 'Cleaning', 'services/providers/cleaning_providers.html')
+
+
+def painting_providers(request):
+    """Display painting service providers"""
+    return get_category_providers(request, 'Painting', 'services/providers/painting_providers.html')
+
+
+def appliance_repair_providers(request):
+    """Display appliance repair service providers"""
+    return get_category_providers(request, 'Appliance Repair', 'services/providers/appliance_repair_providers.html')
+
+
+def handyman_providers(request):
+    """Display handyman service providers"""
+    return get_category_providers(request, 'Handyman', 'services/providers/handyman_providers.html')
+
+
+def get_category_providers(request, category, template):
+    """Helper function to get providers for a specific service category"""
+    providers = User.objects.filter(
+        is_provider=True,
+        service__category=category
+    ).annotate(
+        service_count=Count('service', filter=Q(service__category=category)),
+        total_bookings=Count('service__booking', filter=Q(service__booking__service__category=category)),
+        completed_bookings=Count('service__booking',
+                                filter=Q(service__booking__service__category=category,
+                                        service__booking__status='Completed')),
+    ).distinct()
+
+    provider_list = []
+    for provider in providers:
+        completed_bookings = Booking.objects.filter(
+            service__provider=provider,
+            service__category=category,
+            status='Completed'
+        )
+        total_earnings = sum(booking.service.price for booking in completed_bookings)
+
+        provider_list.append({
+            'provider': provider,
+            'services': Service.objects.filter(provider=provider, category=category),
+            'total_bookings': provider.total_bookings,
+            'completed_bookings': provider.completed_bookings,
+            'total_earnings': total_earnings,
+        })
+
+    # Search filter
+    search_query = request.GET.get('search', '')
+    if search_query:
+        provider_list = [p for p in provider_list if
+                        search_query.lower() in p['provider'].username.lower() or
+                        search_query.lower() in (p['provider'].first_name or '').lower() or
+                        search_query.lower() in (p['provider'].last_name or '').lower()]
+
+    context = {
+        'provider_list': provider_list,
+        'search_query': search_query,
+        'category': category,
+    }
+    return render(request, template, context)

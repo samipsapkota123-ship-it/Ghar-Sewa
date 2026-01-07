@@ -1,0 +1,57 @@
+{% load static %}
+
+<footer class="bg-dark text-light pt-4 pb-3 border-top">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-md-4">
+        <h5 class="mb-3 fw-bold">
+          <img src="{% static 'images/gharsewa.jpeg' %}" alt="Ghar Sewa Logo" height="30" class="me-2 rounded">
+          Ghar Sewa
+        </h5>
+        <p class="small mb-2 text-light-50">
+          Reliable home services for plumbing, electrical, cleaning, and more — all in one place.
+        </p>
+        <p class="small mb-0 text-muted">&copy; {% now "Y" %} Ghar Sewa. All rights reserved.</p>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3 fw-semibold">Quick Links</h6>
+        <ul class="list-unstyled small mb-0">
+          <li class="mb-2"><a href="/" class="text-decoration-none text-light-50 hover-text-primary">Home</a></li>
+          <li class="mb-2"><a href="/services/" class="text-decoration-none text-light-50 hover-text-primary">Services</a></li>
+
+          {% if user.is_authenticated %}
+            {% if user.is_customer %}
+              <li class="mb-2"><a href="{% url 'my_bookings' %}" class="text-decoration-none text-light-50 hover-text-primary">My Bookings</a></li>
+              <li class="mb-2"><a href="{% url 'service_providers' %}" class="text-decoration-none text-light-50 hover-text-primary">All Providers</a></li>
+            {% elif user.is_provider %}
+              <li class="mb-2"><a href="{% url 'provider_bookings' %}" class="text-decoration-none text-light-50 hover-text-primary">My Service Bookings</a></li>
+            {% endif %}
+          {% else %}
+            <li class="mb-2"><a href="{% url 'login' %}" class="text-decoration-none text-light-50 hover-text-primary">Login</a></li>
+            <li class="mb-2"><a href="{% url 'register' %}" class="text-decoration-none text-light-50 hover-text-primary">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h6 class="mb-3 fw-semibold">Contact Us</h6>
+        <p class="small mb-2"><i class="bi bi-telephone me-2"></i> +977-9800000000</p>
+        <p class="small mb-3"><i class="bi bi-envelope me-2"></i> support@gharsewa.com</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-light fs-5 hover-text-primary" title="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light fs-5 hover-text-primary" title="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light fs-5 hover-text-primary" title="Twitter"><i class="bi bi-twitter-x"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .hover-text-primary:hover {
+      color: #0d6efd !important;
+      transition: color 0.2s ease;
+    }
+  </style>
+</footer>
+
+

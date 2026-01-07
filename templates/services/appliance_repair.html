@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/appailance.jpeg' %}" alt="Appliance Repair Services" class="img-fluid rounded shadow" style="max-height: 300px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-secondary mb-3">Appliance Repair</h1>
+            <p class="lead text-muted mb-4">Expert repair services for all your household appliances</p>
+        </div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4 text-center">What We Offer</h3>
+                    <p class="mb-4">Our certified appliance technicians provide reliable repair services for all major household appliances. From refrigerators to washing machines, we diagnose and fix issues quickly with genuine parts and expert knowledge.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-secondary"><i class="bi bi-house-gear me-2"></i>Major Appliances</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Refrigerator repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Washing machine repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Dryer repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Dishwasher repair</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-secondary"><i class="bi bi-gear me-2"></i>Kitchen Appliances</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Oven and stove repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Microwave repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Garbage disposal repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Range hood repair</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repair Process -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Our Repair Process</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                            <i class="bi bi-search fs-4"></i>
+                        </div>
+                        <h6>Diagnosis</h6>
+                        <p class="text-muted small">Thorough diagnostic assessment to identify the exact issue.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                            <i class="bi bi-tools fs-4"></i>
+                        </div>
+                        <h6>Repair</h6>
+                        <p class="text-muted small">Expert repair using genuine parts and proven techniques.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;">
+                            <i class="bi bi-check-circle fs-4"></i>
+                        </div>
+                        <h6>Testing</h6>
+                        <p class="text-muted small">Complete testing to ensure the appliance works perfectly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Issues -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-4">
+                    <h4 class="text-center mb-4">Common Appliance Issues We Fix</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Not cooling properly (refrigerators)</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Strange noises or vibrations</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Not starting or turning on</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Water leakage or drainage issues</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Error codes or malfunctioning displays</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-arrow-right text-primary me-2 mt-1"></i>
+                                <span>Door seals and gasket problems</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Our Appliance Repair Services?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-tools fs-3"></i>
+                        </div>
+                        <h5>Certified Technicians</h5>
+                        <p class="text-muted small">Factory-trained technicians with years of experience.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-clock fs-3"></i>
+                        </div>
+                        <h5>Same-Day Service</h5>
+                        <p class="text-muted small">Quick diagnosis and repair to get your appliances working.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5>Warranty</h5>
+                        <p class="text-muted small">All repairs come with our workmanship warranty.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded shadow-sm">
+                <h4 class="mb-3">Appliance Not Working?</h4>
+                <p class="text-muted mb-4">Find certified appliance repair technicians</p>
+                <a href="{% url 'appliance_repair_providers' %}" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-people me-2"></i>View Appliance Repair Providers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

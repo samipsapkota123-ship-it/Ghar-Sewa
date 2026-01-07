@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/cleaning.jpg' %}" alt="Cleaning Service Providers" class="img-fluid rounded shadow" style="max-height: 250px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-info mb-3">Cleaning Service Providers</h1>
+            <p class="lead text-muted mb-4">Find professional cleaners for your home or business</p>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <label class="form-label">Search Cleaners</label>
+                    <input type="text" class="form-control" name="search"
+                           value="{{ search_query }}" placeholder="Search by cleaner name or username...">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-info w-100 text-white">Search</button>
+                </div>
+            </form>
+            {% if search_query %}
+            <div class="mt-2">
+                <a href="{% url 'cleaning_providers' %}" class="btn btn-sm btn-outline-secondary">Clear Search</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Providers List -->
+    {% if provider_list %}
+    <div class="row">
+        {% for item in provider_list %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">
+                                <i class="bi bi-bucket"></i>
+                                {{ item.provider.username }}
+                            </h5>
+                            {% if item.provider.first_name or item.provider.last_name %}
+                            <small>{{ item.provider.first_name }} {{ item.provider.last_name }}</small>
+                            {% endif %}
+                            {% if item.provider.phone_number %}
+                            <br><small><i class="bi bi-telephone"></i> {{ item.provider.phone_number }}</small>
+                            {% endif %}
+                        </div>
+                        <span class="badge bg-light text-dark">{{ item.services.count }} Cleaning Services</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Statistics -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small class="text-muted">Total Bookings</small>
+                            <h6>{{ item.total_bookings }}</h6>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Completed</small>
+                            <h6>{{ item.completed_bookings }}</h6>
+                        </div>
+                    </div>
+
+                    {% if user.is_provider and item.total_earnings > 0 %}
+                    <div class="alert alert-success py-2 mb-3">
+                        <small><strong>Total Earnings: ₹{{ item.total_earnings }}</strong></small>
+                    </div>
+                    {% endif %}
+
+                    <!-- Services -->
+                    <h6 class="mb-2">Cleaning Services Offered:</h6>
+                    {% if item.services %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Service Fee</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for service in item.services %}
+                                <tr {% if not service.is_available %}class="table-secondary"{% endif %}>
+                                    <td>
+                                        {{ service.name }}
+                                        {% if not service.is_available %}
+                                        <br><span class="badge bg-warning text-dark">Not Available</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><strong>₹{{ service.price }}</strong></td>
+                                    <td>
+                                        {% if service.is_available %}
+                                        <a href="{% url 'book_service' service.id %}" class="btn btn-sm btn-info text-white">
+                                            Book Now
+                                        </a>
+                                        {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>Not Available</button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted small">No cleaning services available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle"></i> No cleaning service providers found.
+    </div>
+    {% endif %}
+
+    <!-- Back to Services -->
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{% url 'cleaning' %}" class="btn btn-outline-info">
+                <i class="bi bi-arrow-left me-2"></i>Back to Cleaning Services
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

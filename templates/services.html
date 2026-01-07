@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4 pt-4">
     <div>
@@ -10,35 +12,35 @@
 <!-- Category Cards -->
 <div class="row mb-5">
     {% for category_data in categories_list %}
-    <div class="col-4 mb-3">
-        <div class="card category-card shadow-sm h-100" 
-             onclick="showCategory('{{ category_data.category }}')" 
-             style="cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;"
-             onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.15)'"
-             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
-            <div class="card-body text-center p-4">
-                <div class="mb-3" style="font-size: 3rem;">
-                    {% if category_data.category == 'Plumbing' %}
-                        <i class="bi bi-droplet-fill text-primary"></i>
-                    {% elif category_data.category == 'Electrical' %}
-                        <i class="bi bi-lightbulb-fill text-warning"></i>
-                    {% elif category_data.category == 'Cleaning' %}
-                    <i class="bi bi-bucket" style="font-size: 2rem; color: #0d6efd;"></i>
-
-                    {% elif category_data.category == 'Painting' %}
-                        <i class="bi bi-house-fill text-primary fs-3 me-2"></i>
-                    {% elif category_data.category == 'Appliance Repair' %}
-                        <i class="bi bi-tools text-secondary"></i>
-                    {% elif category_data.category == 'Handyman' %}
-                        <i class="bi bi-wrench-adjustable text-success"></i>
-                    {% else %}
-                        <i class="bi bi-briefcase-fill text-primary"></i>
-                    {% endif %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <a href="{% if category_data.category == 'Plumbing' %}{% url 'plumbing' %}{% elif category_data.category == 'Electrical' %}{% url 'electrical' %}{% elif category_data.category == 'Cleaning' %}{% url 'cleaning' %}{% elif category_data.category == 'Painting' %}{% url 'painting' %}{% elif category_data.category == 'Appliance Repair' %}{% url 'appliance_repair' %}{% elif category_data.category == 'Handyman' %}{% url 'handyman' %}{% endif %}" class="text-decoration-none">
+            <div class="card category-card shadow-sm h-100"
+                 style="cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: none; border-radius: 15px; overflow: hidden;"
+                 onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'">
+                {% if category_data.category == 'Plumbing' %}
+                    <img src="{% static 'images/plumbing.jpg' %}" class="card-img-top" alt="Plumbing" style="height: 200px; object-fit: cover;">
+                {% elif category_data.category == 'Electrical' %}
+                    <img src="{% static 'images/electrician.jpg' %}" class="card-img-top" alt="Electrical" style="height: 200px; object-fit: cover;">
+                {% elif category_data.category == 'Cleaning' %}
+                    <img src="{% static 'images/cleaning.jpg' %}" class="card-img-top" alt="Cleaning" style="height: 200px; object-fit: cover;">
+                {% elif category_data.category == 'Painting' %}
+                    <img src="{% static 'images/painting.jpg' %}" class="card-img-top" alt="Painting" style="height: 200px; object-fit: cover;">
+                {% elif category_data.category == 'Appliance Repair' %}
+                    <img src="{% static 'images/appailance.jpeg' %}" class="card-img-top" alt="Appliance Repair" style="height: 200px; object-fit: cover;">
+                {% elif category_data.category == 'Handyman' %}
+                    <img src="{% static 'images/handyman.jpeg' %}" class="card-img-top" alt="Handyman" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-primary d-flex align-items-center justify-content-center text-white" style="height: 200px;">
+                        <i class="bi bi-briefcase-fill" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body text-center p-4">
+                    <h5 class="card-title mb-2 fw-bold text-dark">{{ category_data.category }}</h5>
+                    <small class="text-muted">{{ category_data.service_count }} Service{{ category_data.service_count|pluralize }} Available</small>
                 </div>
-                <h5 class="card-title mb-0">{{ category_data.category }}</h5>
-                <small class="text-muted">{{ category_data.service_count }} Service{{ category_data.service_count|pluralize }}</small>
             </div>
-        </div>
+        </a>
     </div>
     {% endfor %}
 </div>
@@ -94,23 +96,22 @@
                             <div class="border rounded p-2 mb-2 {% if not service.is_available %}bg-light{% endif %}">
                                 <div class="d-flex justify-content-between align-items-start mb-1">
                                     <div>
-                                        <strong class="small">{{ service.name }}</strong>
+                                        <a href="{% url 'service_detail' service.id %}" class="text-decoration-none" target="_blank">
+                                            <strong class="small text-primary">{{ service.name }}</strong>
+                                        </a>
                                         {% if not service.is_available %}
                                         <br><span class="badge bg-warning text-dark">Not Available</span>
                                         {% endif %}
                                     </div>
                                     <span class="badge bg-success">₹{{ service.price }}</span>
                                 </div>
-                                <div class="d-grid gap-1">
-                                    <a href="{% url 'service_detail' service.id %}" class="btn btn-outline-primary btn-sm">
-                                        <i class="bi bi-eye"></i> View
-                                    </a>
+                                <div class="d-flex gap-2">
                                     {% if user.is_authenticated %}
-                                    <a href="{% url 'book_service' service.id %}" class="btn btn-success btn-sm">
+                                    <a href="{% url 'book_service' service.id %}" class="btn btn-success btn-sm flex-fill">
                                         <i class="bi bi-calendar-check"></i> Book
                                     </a>
                                     {% else %}
-                                    <a href="{% url 'login' %}" class="btn btn-success btn-sm">
+                                    <a href="{% url 'login' %}" class="btn btn-success btn-sm flex-fill">
                                         <i class="bi bi-box-arrow-in-right"></i> Login to Book
                                     </a>
                                     {% endif %}

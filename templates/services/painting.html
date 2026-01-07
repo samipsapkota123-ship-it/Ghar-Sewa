@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/painting.jpg' %}" alt="Painting Services" class="img-fluid rounded shadow" style="max-height: 300px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-danger mb-3">Painting Services</h1>
+            <p class="lead text-muted mb-4">Transform your space with professional painting services</p>
+        </div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4 text-center">What We Offer</h3>
+                    <p class="mb-4">Our skilled painters provide high-quality painting services for residential and commercial properties. From interior walls to exterior houses, we use premium paints and expert techniques to deliver beautiful, long-lasting results.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-danger"><i class="bi bi-house-door me-2"></i>Interior Painting</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Wall and ceiling painting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Trim and molding painting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Door and window painting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Color consultation</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-danger"><i class="bi bi-building me-2"></i>Exterior Painting</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>House exterior painting</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Deck and fence staining</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Power washing</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-danger me-2"></i>Surface preparation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painting Types -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Types of Painting Services</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-body text-center">
+                            <i class="bi bi-brush text-danger fs-1 mb-3"></i>
+                            <h5 class="card-title">Standard Painting</h5>
+                            <p class="card-text text-muted">One or two coats of quality paint for lasting beauty.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body text-center">
+                            <i class="bi bi-palette text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Premium Painting</h5>
+                            <p class="card-text text-muted">High-end paints with multiple coats for superior finish.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-warning">
+                        <div class="card-body text-center">
+                            <i class="bi bi-tools text-warning fs-1 mb-3"></i>
+                            <h5 class="card-title">Restorative Painting</h5>
+                            <p class="card-text text-muted">Repair and painting for damaged or weathered surfaces.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Our Painting Services?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-palette fs-3"></i>
+                        </div>
+                        <h5>Expert Craftsmen</h5>
+                        <p class="text-muted small">Years of experience with attention to detail and quality work.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-droplet fs-3"></i>
+                        </div>
+                        <h5>Premium Paints</h5>
+                        <p class="text-muted small">We use only high-quality, durable paints and materials.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5>Clean & Professional</h5>
+                        <p class="text-muted small">We protect your property and leave everything clean.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded shadow-sm">
+                <h4 class="mb-3">Ready to Transform Your Space?</h4>
+                <p class="text-muted mb-4">Find skilled painters for your painting project</p>
+                <a href="{% url 'painting_providers' %}" class="btn btn-danger btn-lg">
+                    <i class="bi bi-people me-2"></i>View Painting Service Providers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

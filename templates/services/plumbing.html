@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/plumbing.jpg' %}" alt="Plumbing Services" class="img-fluid rounded shadow" style="max-height: 300px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-primary mb-3">Plumbing Services</h1>
+            <p class="lead text-muted mb-4">Professional plumbing solutions for your home and business</p>
+        </div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4 text-center">What We Offer</h3>
+                    <p class="mb-4">Our certified plumbers provide comprehensive plumbing services to ensure your home's water systems work efficiently and safely. From emergency repairs to preventive maintenance, we handle all your plumbing needs with expertise and care.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-primary"><i class="bi bi-wrench-adjustable me-2"></i>Emergency Repairs</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Burst pipe repairs</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Leak detection and fixes</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Water heater issues</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Drainage problems</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-primary"><i class="bi bi-tools me-2"></i>Installation & Maintenance</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Fixture installation</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Pipe repairs and replacement</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Regular maintenance</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>System upgrades</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Our Plumbing Services?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5>Licensed & Insured</h5>
+                        <p class="text-muted small">All our plumbers are fully licensed and insured for your peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-clock-history fs-3"></i>
+                        </div>
+                        <h5>24/7 Emergency Service</h5>
+                        <p class="text-muted small">Round-the-clock emergency plumbing services when you need them most.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-star fs-3"></i>
+                        </div>
+                        <h5>Quality Guarantee</h5>
+                        <p class="text-muted small">100% satisfaction guarantee on all our plumbing work.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded shadow-sm">
+                <h4 class="mb-3">Need Plumbing Help?</h4>
+                <p class="text-muted mb-4">Connect with verified plumbing professionals in your area</p>
+                <a href="{% url 'plumbing_providers' %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-people me-2"></i>View Plumbing Service Providers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

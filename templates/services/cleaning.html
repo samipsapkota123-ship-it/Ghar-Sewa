@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/cleaning.jpg' %}" alt="Cleaning Services" class="img-fluid rounded shadow" style="max-height: 300px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-info mb-3">Cleaning Services</h1>
+            <p class="lead text-muted mb-4">Professional cleaning services for homes and businesses</p>
+        </div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4 text-center">What We Offer</h3>
+                    <p class="mb-4">Our professional cleaning services ensure your space is spotless and hygienic. From regular maintenance cleaning to deep cleaning projects, we use eco-friendly products and proven techniques to deliver exceptional results.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-info"><i class="bi bi-house me-2"></i>Residential Cleaning</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Regular house cleaning</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Deep cleaning services</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Kitchen and bathroom cleaning</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Dusting and vacuuming</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-info"><i class="bi bi-building me-2"></i>Specialized Cleaning</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Carpet and upholstery cleaning</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Window cleaning</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Post-construction cleanup</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Move-in/move-out cleaning</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cleaning Process -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Our Cleaning Process</h3>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fw-bold">1</span>
+                        </div>
+                        <h6>Assessment</h6>
+                        <p class="text-muted small">We evaluate your cleaning needs and create a customized plan.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fw-bold">2</span>
+                        </div>
+                        <h6>Preparation</h6>
+                        <p class="text-muted small">We gather eco-friendly supplies and prepare your space.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fw-bold">3</span>
+                        </div>
+                        <h6>Cleaning</h6>
+                        <p class="text-muted small">Professional cleaning using proven techniques and quality products.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <span class="fw-bold">4</span>
+                        </div>
+                        <h6>Inspection</h6>
+                        <p class="text-muted small">Final walkthrough to ensure your complete satisfaction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Our Cleaning Services?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-tree fs-3"></i>
+                        </div>
+                        <h5>Eco-Friendly</h5>
+                        <p class="text-muted small">We use environmentally friendly cleaning products and methods.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5>Insured & Bonded</h5>
+                        <p class="text-muted small">Fully insured and bonded for your complete peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-star fs-3"></i>
+                        </div>
+                        <h5>Satisfaction Guaranteed</h5>
+                        <p class="text-muted small">We guarantee your satisfaction with our cleaning services.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded shadow-sm">
+                <h4 class="mb-3">Need Professional Cleaning?</h4>
+                <p class="text-muted mb-4">Find reliable cleaning professionals for your home or business</p>
+                <a href="{% url 'cleaning_providers' %}" class="btn btn-info btn-lg text-white">
+                    <i class="bi bi-people me-2"></i>View Cleaning Service Providers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

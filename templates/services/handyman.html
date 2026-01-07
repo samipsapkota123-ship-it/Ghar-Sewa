@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Service Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="service-header-image mb-4">
+                <img src="{% static 'images/handyman.jpeg' %}" alt="Handyman Services" class="img-fluid rounded shadow" style="max-height: 300px; width: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-5 fw-bold text-success mb-3">Handyman Services</h1>
+            <p class="lead text-muted mb-4">Reliable handyman services for all your home repair needs</p>
+        </div>
+    </div>
+
+    <!-- Service Description -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="card-title mb-4 text-center">What We Offer</h3>
+                    <p class="mb-4">Our skilled handymen provide comprehensive repair and maintenance services for your home. From minor fixes to major renovations, we handle all types of home improvement projects with professionalism and attention to detail.</p>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="text-success"><i class="bi bi-tools me-2"></i>Repairs & Maintenance</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Door and window repairs</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Furniture assembly</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Shelf and cabinet installation</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Fixture installation</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-success"><i class="bi bi-house-gear me-2"></i>Home Improvements</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Drywall repair</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Tile and flooring work</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Deck and fence repairs</li>
+                                <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>General carpentry</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Popular Handyman Services</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-success hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-door-open text-success fs-2 mb-3"></i>
+                            <h6 class="card-title">Doors & Windows</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Door installation/repair</li>
+                                <li>Window replacement</li>
+                                <li>Lock installation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-primary hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-hammer text-primary fs-2 mb-3"></i>
+                            <h6 class="card-title">Carpentry</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Shelving installation</li>
+                                <li>Cabinet repairs</li>
+                                <li>Trim work</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-warning hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-wrench text-warning fs-2 mb-3"></i>
+                            <h6 class="card-title">General Repairs</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Wall repairs</li>
+                                <li>Fixture repairs</li>
+                                <li>Hardware replacement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-info hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-lightbulb text-info fs-2 mb-3"></i>
+                            <h6 class="card-title">Lighting</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Light fixture installation</li>
+                                <li>Ceiling fan installation</li>
+                                <li>Outlet repairs</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-secondary hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-droplet text-secondary fs-2 mb-3"></i>
+                            <h6 class="card-title">Plumbing Basics</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Faucet repairs</li>
+                                <li>Toilet repairs</li>
+                                <li>Leak fixes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-danger hover-shadow">
+                        <div class="card-body text-center">
+                            <i class="bi bi-house-gear text-danger fs-2 mb-3"></i>
+                            <h6 class="card-title">Assembly</h6>
+                            <ul class="list-unstyled small text-muted">
+                                <li>Furniture assembly</li>
+                                <li>Grill assembly</li>
+                                <li>Exercise equipment</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <h3 class="text-center mb-4">Why Choose Our Handyman Services?</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-tools fs-3"></i>
+                        </div>
+                        <h5>Skilled & Versatile</h5>
+                        <p class="text-muted small">Multi-skilled professionals who can handle various repair tasks.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-clock fs-3"></i>
+                        </div>
+                        <h5>Reliable & Punctual</h5>
+                        <p class="text-muted small">On-time service with reliable, trustworthy professionals.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-cash-coin fs-3"></i>
+                        </div>
+                        <h5>Fair Pricing</h5>
+                        <p class="text-muted small">Transparent pricing with no hidden fees or surprises.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="bg-light p-5 rounded shadow-sm">
+                <h4 class="mb-3">Need a Handyman?</h4>
+                <p class="text-muted mb-4">Find skilled handymen for your repair and maintenance needs</p>
+                <a href="{% url 'handyman_providers' %}" class="btn btn-success btn-lg">
+                    <i class="bi bi-people me-2"></i>View Handyman Service Providers
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}
