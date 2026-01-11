@@ -1,5 +1,369 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<h2>Find Trusted Home Services</h2>
-<a href="/services/" class="btn btn-primary">View Services</a>
+
+<style>
+/* ===== Carousel Styling ===== */
+
+.carousel-custom {
+    /* Break out of the centered container and span the full viewport width */
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+    height: 65vh;
+    overflow: hidden;
+
+}
+
+.carousel-img {
+    width: 100%;
+    height: 65vh;
+    object-fit: cover;
+}
+
+.carousel-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+.carousel-text h1,
+.carousel-text p {
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+.hero{
+   animation: floatText 5s ease-in-out infinite;
+   
+}
+@keyframes floatText {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+/* ===== "Book a Service" Hover ===== */
+.book-service-cta {
+  transition: box-shadow 180ms ease, filter 180ms ease;
+  
+}
+.book-service-cta:hover {
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  filter: brightness(1.06) saturate(1.05);
+  
+}
+.book-service-cta:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.35);
+}
+.hero-title{
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+.hero-title:hover {
+  transform: scale(1.5);
+
+}
+.effect{
+  transition: all 0.4s ease;
+  cursor: pointer;
+}
+.effect:hover {
+  transform: scale(1.05);
+}
+.house{
+  position: relative;
+}
+.picture img{
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+.house-text{
+  position: absolute;
+  bottom: 1px;
+  top: 680px;
+  left: 950px;
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeSlideIn 1.5s ease forwards;
+}
+@keyframes fadeSlideIn {
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+
+<!-- ===== Carousel Start ===== -->
+<div id="carouselExampleAutoplaying"
+     class="carousel slide carousel-custom"
+     data-bs-ride="carousel">
+
+  <div class="carousel-inner">
+
+    <div class="carousel-item active">
+      <img src="{% static 'profile_pictures/plumbing.jpg' %}"
+           class="d-block w-100 carousel-img"
+           alt="Plumbing">
+    </div>
+
+    <div class="carousel-item">
+      <img src="{% static 'profile_pictures/electrician.jpg' %}"
+           class="d-block w-100 carousel-img"
+           alt="Electrician">
+    </div>
+
+    <div class="carousel-item">
+      <img src="{% static 'profile_pictures/cleaning.jpg' %}"
+           class="d-block w-100 carousel-img"
+           alt="Cleaning">
+    </div>
+
+  </div>
+
+  <!-- ===== Stable Text Overlay ===== -->
+  <div class="carousel-caption carousel-text">
+    <h1 class="display-4 fw-bold  hero">Find Trusted Home Services</h1>
+    <p class="fs-4 hero fw-semibold hero">Plumber • Electrician • Cleaning • More</p>
+    <a href="/services/" class="btn btn-primary btn-lg mt-3 fw-semibold book-service-cta hero-title">
+      Book a Service
+    </a>
+  </div>
+
+  <!-- Controls -->
+  <button class="carousel-control-prev" type="button"
+          data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+
+  <button class="carousel-control-next" type="button"
+          data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+
+</div>
+<!-- ===== Carousel End ===== -->
+
+<!-- ===== Intro / About ===== -->
+<section class="container py-5">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <h2 class="fw-bold mb-3">Everything for your home, in one place</h2>
+      <p class="text-secondary mb-3">
+        GharSewa connects you with verified professionals for plumbing, electrical work, cleaning,
+        painting, and more. Book in minutes, track your bookings, and pay securely.
+      </p>
+      <ul class="list-unstyled">
+        <li class="mb-2"><i class="bi bi-patch-check-fill text-primary me-2"></i> Verified, community‑rated providers</li>
+        <li class="mb-2"><i class="bi bi-shield-lock-fill text-primary me-2"></i> Secure payments and receipts</li>
+        <li class="mb-2"><i class="bi bi-clock-history text-primary me-2"></i> Flexible scheduling and quick support</li>
+      </ul>
+      <a href="/services/" class="btn btn-outline-primary mt-2">Explore Services</a>
+    </div>
+    <div class="col-lg-5">
+     
+      <div class="bg-light rounded-4 p-4 h-100 d-flex align-items-center justify-content-center">
+        
+        <div class="text-center">
+          <div class="picture img">
+            <img src="{% static 'profile_pictures/house.jpg' %}" alt="Home" class="img-fluid rounded-4 mb-3 house ">
+          </div> 
+          <div class="house-text">
+            <i class="bi bi-house-gear fs-1 text-primary d-block mb-2"></i>
+          <p class="mb-0 ">Trusted by homeowners across the city</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Features ===== -->
+<section class="container py-5">
+  <h3 class="fw-bold text-center mb-4">Why choose GharSewa?</h3>
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100 feature-card">
+        <div class="card-body">
+          <i class="bi bi-people-fill text-primary fs-3 mb-2"></i>
+          <h5 class="card-title">Vetted Providers</h5>
+          <p class="card-text text-secondary">We screen and verify all professionals so you can book with confidence.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100 feature-card">
+        <div class="card-body">
+          <i class="bi bi-cash-coin text-primary fs-3 mb-2"></i>
+          <h5 class="card-title">Transparent Pricing</h5>
+          <p class="card-text text-secondary">Clear rates and options before you confirm your booking.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100 feature-card">
+        <div class="card-body">
+          <i class="bi bi-lightning-charge-fill text-primary fs-3 mb-2"></i>
+          <h5 class="card-title">Fast Booking</h5>
+          <p class="card-text text-secondary">Book in a few taps and get help when you need it.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card border-0 shadow-sm h-100 feature-card">
+        <div class="card-body">
+          <i class="bi bi-headset text-primary fs-3 mb-2"></i>
+          <h5 class="card-title">Support</h5>
+          <p class="card-text text-secondary">Friendly help if anything isn’t perfect with your service.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== How It Works ===== -->
+<section class="container py-5">
+  <h3 class="fw-bold text-center mb-4">How it works</h3>
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      <div class="h-100 p-4 border rounded-4 bg-light">
+        <div class="d-flex align-items-center mb-2">
+          <span class="badge bg-primary me-2">1</span>
+          <h5 class="mb-0">Browse services</h5>
+        </div>
+        <p class="text-secondary mb-0">Find the right category and view details, ratings, and pricing.</p>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="h-100 p-4 border rounded-4 bg-light">
+        <div class="d-flex align-items-center mb-2">
+          <span class="badge bg-primary me-2">2</span>
+          <h5 class="mb-0">Book and schedule</h5>
+        </div>
+        <p class="text-secondary mb-0">Pick a time that works for you and confirm your booking.</p>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="h-100 p-4 border rounded-4 bg-light">
+        <div class="d-flex align-items-center mb-2">
+          <span class="badge bg-primary me-2">3</span>
+          <h5 class="mb-0">Get it done</h5>
+        </div>
+        <p class="text-secondary mb-0">A verified pro arrives and completes the job—simple and secure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Popular Categories ===== -->
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0">Popular categories</h3>
+    <a href="/services/" class="btn btn-sm btn-outline-primary">See all</a>
+  </div>
+  <div class="row g-4">
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/services/" class="text-decoration-none">
+        <div class="card border-0 shadow-sm category-card h-100 effect">
+          <img src="{% static 'profile_pictures/plumbing.jpg' %}" class="card-img-top" alt="Plumbing">
+          <div class="card-body">
+            <h6 class="card-title mb-0 text-dark ">Plumbing</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/services/" class="text-decoration-none">
+        <div class="card border-0 shadow-sm category-card h-100 effect">
+          <img src="{% static 'profile_pictures/electrician.jpg' %}" class="card-img-top" alt="Electrician">
+          <div class="card-body">
+            <h6 class="card-title mb-0 text-dark">Electrical</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/services/" class="text-decoration-none">
+        <div class="card border-0 shadow-sm category-card h-100 effect">
+          <img src="{% static 'profile_pictures/cleaning.jpg' %}" class="card-img-top" alt="Cleaning">
+          <div class="card-body">
+            <h6 class="card-title mb-0 text-dark">Cleaning</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <a href="/services/" class="text-decoration-none">
+        <div class="card border-0 shadow-sm category-card h-100 effect">
+          <img src="{% static 'profile_pictures/painting.jpg' %}" class="card-img-top" alt="Painting">
+          <div class="card-body">
+            <h6 class="card-title mb-0 text-dark">Painting</h6>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Testimonials ===== -->
+<section class="container py-5">
+  <h3 class="fw-bold text-center mb-4">What customers say</h3>
+  <div class="row g-4">
+    <div class="col-12 col-md-6">
+      <div class="p-4 border rounded-4 h-100">
+        <div class="d-flex align-items-start">
+          <i class="bi bi-chat-quote-fill text-primary fs-3 me-3"></i>
+          <div>
+            <p class="mb-2 text-secondary">“केही मिनेटमै प्लम्बर बुक गर्न सकेँ र काम उत्कृष्ट थियो। फेरि पनि सेवा लिनेछु!”</p>
+            <small class="text-muted">— Paras Pandey, Customer</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="p-4 border rounded-4 h-100">
+        <div class="d-flex align-items-start">
+          <i class="bi bi-chat-quote-fill text-primary fs-3 me-3"></i>
+          <div>
+            <p class="mb-2 text-secondary">“सेवा बुक गर्न सजिलो र मूल्य निर्धारण पनि स्पष्ट छ। अत्यन्तै सिफारिसयोग्य।”</p>
+            <small class="text-muted">— Anup Pokharel, Customer</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="container py-5 text-center">
+  <div class="p-5 rounded-4 bg-light">
+    <h4 class="fw-bold mb-2">Ready to get started?</h4>
+    <p class="text-secondary mb-3">Find a trusted professional for your next home task.</p>
+    <a href="/services/" class="btn btn-primary btn-lg book-service-cta hero-title">Book a Service</a>
+  </div>
+  <style>
+  .feature-card {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 30px rgba(0,0,0,0.12);
+  }
+  .category-card img {
+    height: 150px;
+    object-fit: cover;
+  }
+  </style>
+</section>
+
 {% endblock %}
