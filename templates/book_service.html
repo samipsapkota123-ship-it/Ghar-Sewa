@@ -23,7 +23,7 @@
                 {% endif %}
               </div>
               <div>
-                <h6 class="mb-0">{{ service.provider.username }}</h6>
+                {% include 'partials/provider_company_line.html' with provider=service.provider %}
                 {% if service.provider.first_name or service.provider.last_name %}
                   <small class="text-muted">{{ service.provider.first_name }} {{ service.provider.last_name }}</small>
                 {% endif %}

@@ -1,0 +1,10 @@
+{# Expects item with rating_avg and rating_count (from provider list dicts). #}
+{% if item.rating_avg %}
+<div class="mt-1">
+  <span class="text-warning"><i class="bi bi-star-fill"></i></span>
+  <strong class="text-dark ms-1">{{ item.rating_avg|floatformat:1 }}</strong>
+  <small class="text-muted">/5 · {{ item.rating_count }} review{{ item.rating_count|pluralize }}</small>
+</div>
+{% else %}
+<small class="text-muted d-block mt-1">No ratings yet</small>
+{% endif %}

@@ -72,6 +72,12 @@
                         <th>Address:</th>
                         <td>{{ user.address|default:"Not set"|linebreaks }}</td>
                     </tr>
+                    {% if user.is_provider %}
+                    <tr>
+                        <th>Company:</th>
+                        <td>{% if user.company_name %}<i class="bi bi-building"></i> {{ user.company_name }}{% else %}<span class="text-muted">Not set</span>{% endif %}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th>Account Type:</th>
                         <td>

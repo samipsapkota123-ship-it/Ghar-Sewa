@@ -14,6 +14,12 @@ class User(AbstractUser):
     profile_picture = models.ImageField(upload_to=user_profile_picture_path, blank=True, null=True, help_text="Profile picture")
     phone_number = models.CharField(max_length=15, blank=True, null=True, help_text="Phone number")
     address = models.TextField(blank=True, null=True, help_text="Address")
-    
+    company_name = models.CharField(
+        max_length=200,
+        blank=True,
+        default='',
+        help_text="Company or business name (for service providers)",
+    )
+
     def __str__(self):
         return self.username

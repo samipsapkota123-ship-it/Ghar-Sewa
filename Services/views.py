@@ -1,14 +1,40 @@
+from collections import defaultdict
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Avg, Q
 from django.contrib import messages
+
 from .models import Service
+from .algorithm_utils import (
+    add_ratings_to_category_list,
+    add_ratings_to_provider_items,
+    filter_providers_by_search,
+    match_exact_username,
+    provider_matches_search,
+)
 from Accounts.models import User
-from Bookings.models import Booking
+from Bookings.models import Booking, ReviewRating
 from django.contrib.auth.decorators import login_required
+
+
+def group_provider_items_by_company(provider_list):
+    """Group [{'provider': User, ...}, ...] by provider.company_name (sorted A–Z)."""
+    by_company = defaultdict(list)
+    for item in provider_list:
+        cn = (item['provider'].company_name or '').strip() or '—'
+        by_company[cn].append(item)
+    return [
+        {
+            'company_name': name,
+            'providers': sorted(items, key=lambda x: x['provider'].username.lower()),
+        }
+        for name, items in sorted(by_company.items(), key=lambda x: x[0].lower())
+    ]
 
 @login_required
 def service_list(request):
-    services = Service.objects.select_related('provider').all()
+    # Only list services from providers registered under a company (bookable providers)
+    services = Service.objects.select_related('provider').exclude(provider__company_name='')
     
     # Get search and filter parameters
     search_query = request.GET.get('search', '')
@@ -19,7 +45,8 @@ def service_list(request):
             Q(name__icontains=search_query) |
             Q(provider__username__icontains=search_query) |
             Q(provider__first_name__icontains=search_query) |
-            Q(provider__last_name__icontains=search_query)
+            Q(provider__last_name__icontains=search_query) |
+            Q(provider__company_name__icontains=search_query)
         )
     
     if category_filter:
@@ -28,45 +55,59 @@ def service_list(request):
     # Get all categories from model choices
     all_category_choices = [choice[0] for choice in Service.CATEGORY_CHOICES]
     
-    # Group services by category, then by provider
+    # Group: category → company → provider → services
     categories_dict = {}
     for service in services:
         category = service.category
         provider = service.provider
-        
+        company = (provider.company_name or '').strip() or '—'
+
         if category not in categories_dict:
             categories_dict[category] = {}
-        
-        if provider.id not in categories_dict[category]:
-            categories_dict[category][provider.id] = {
+        if company not in categories_dict[category]:
+            categories_dict[category][company] = {}
+        if provider.id not in categories_dict[category][company]:
+            categories_dict[category][company][provider.id] = {
                 'provider': provider,
-                'services': []
+                'services': [],
             }
-        
-        categories_dict[category][provider.id]['services'].append(service)
-    
-    # Create list for all categories 
+        categories_dict[category][company][provider.id]['services'].append(service)
+
+    # Create list for all categories
     categories_list = []
     for category in all_category_choices:
         if category in categories_dict:
-            providers_dict = categories_dict[category]
-            providers_list = list(providers_dict.values())
-            service_count = sum(len(p['services']) for p in providers_list)
+            companies_dict = categories_dict[category]
+            companies_list = []
+            for company_name in sorted(companies_dict.keys(), key=lambda x: x.lower()):
+                prov_map = companies_dict[company_name]
+                providers_list = list(prov_map.values())
+                companies_list.append({
+                    'company_name': company_name,
+                    'providers': providers_list,
+                })
+            service_count = sum(
+                len(p['services'])
+                for co in companies_list
+                for p in co['providers']
+            )
         else:
-            providers_list = []
+            companies_list = []
             service_count = 0
-        
+
         categories_list.append({
             'category': category,
-            'providers': providers_list,
-            'service_count': service_count
+            'companies': companies_list,
+            'service_count': service_count,
         })
-    
+
     # Sort categories
     categories_list.sort(key=lambda x: x['category'])
+
+    add_ratings_to_category_list(categories_list)
     
     # Get all unique categories for filter dropdown
-    all_categories = Service.objects.values_list('category', flat=True).distinct()
+    all_categories = Service.objects.exclude(provider__company_name='').values_list('category', flat=True).distinct()
     
     context = {
         'categories_list': categories_list,
@@ -78,60 +119,129 @@ def service_list(request):
 
 @login_required
 def service_providers(request):
-    """List all service providers with their services and statistics"""
-    providers = User.objects.filter(is_provider=True).annotate(
-        service_count=Count('service'),
-        total_bookings=Count('service__booking'),
-        completed_bookings=Count('service__booking', filter=Q(service__booking__status='Completed')),
-    )
-    
-    # Calculate earnings for each provider
-    provider_list = []
-    for provider in providers:
-        completed_bookings = Booking.objects.filter(
-            service__provider=provider,
-            status='Completed'
+    """Category → company → providers (customer marketplace view)."""
+    raw_search = request.GET.get('search', '').strip()
+    search_lower = raw_search.lower()
+
+    all_categories = [c[0] for c in Service.CATEGORY_CHOICES]
+    category_sections = []
+
+    for idx, category in enumerate(all_categories):
+        provider_ids = (
+            Service.objects.filter(provider__is_provider=True)
+            .exclude(provider__company_name='')
+            .filter(category=category)
+            .values_list('provider_id', flat=True)
+            .distinct()
         )
-        total_earnings = sum(booking.service.price for booking in completed_bookings)
-        
-        provider_list.append({
-            'provider': provider,
-            'services': Service.objects.filter(provider=provider),
-            'total_bookings': provider.total_bookings,
-            'completed_bookings': provider.completed_bookings,
-            'total_earnings': total_earnings,
-        })
-    
-    # Search filter
-    search_query = request.GET.get('search', '')
-    if search_query:
-        provider_list = [p for p in provider_list if 
-                        search_query.lower() in p['provider'].username.lower() or
-                        search_query.lower() in (p['provider'].first_name or '').lower() or
-                        search_query.lower() in (p['provider'].last_name or '').lower()]
-    
+        providers = User.objects.filter(id__in=provider_ids).exclude(company_name='').order_by(
+            'username'
+        )
+        plist = list(providers)
+        used_exact = False
+        if raw_search:
+            plist, used_exact = match_exact_username(plist, search_lower)
+
+        provider_list = []
+        for provider in plist:
+            services = Service.objects.filter(provider=provider, category=category)
+
+            if raw_search and not used_exact:
+                if not provider_matches_search(provider, services, category, raw_search):
+                    continue
+
+            completed_qs = Booking.objects.filter(
+                service__provider=provider,
+                service__category=category,
+                status='Completed',
+            )
+            total_bookings = Booking.objects.filter(
+                service__provider=provider,
+                service__category=category,
+            ).count()
+
+            provider_list.append({
+                'provider': provider,
+                'services': services,
+                'total_bookings': total_bookings,
+                'completed_bookings': completed_qs.count(),
+                'total_earnings': sum(b.service.price for b in completed_qs),
+            })
+
+        add_ratings_to_provider_items(provider_list)
+        company_groups = group_provider_items_by_company(provider_list)
+        if company_groups:
+            category_sections.append({
+                'category': category,
+                'collapse_prefix': f'sp-cat-{idx}',
+                'company_groups': company_groups,
+            })
+
     context = {
-        'provider_list': provider_list,
-        'search_query': search_query,
+        'category_sections': category_sections,
+        'search_query': raw_search,
     }
     return render(request, 'service_providers.html', context)
+
+
+@login_required
+def provider_customer_reviews(request, provider_id):
+    """All customer ratings & reviews for a bookable service provider."""
+    provider = get_object_or_404(
+        User.objects.filter(is_provider=True).exclude(company_name=''),
+        id=provider_id,
+    )
+    reviews = (
+        ReviewRating.objects.filter(provider=provider, status=True)
+        .select_related('customer', 'booking', 'booking__service')
+        .order_by('-created_at')
+    )
+    rating_stats = ReviewRating.objects.filter(provider=provider, status=True).aggregate(
+        avg=Avg('rating'),
+        n=Count('id'),
+    )
+    context = {
+        'provider': provider,
+        'reviews': reviews,
+        'review_avg': rating_stats['avg'],
+        'review_count': rating_stats['n'] or 0,
+    }
+    return render(request, 'provider_customer_reviews.html', context)
+
+
 @login_required
 def service_detail(request, service_id):
     """Display service details with provider information"""
-    service = get_object_or_404(Service.objects.select_related('provider'), id=service_id)
+    service = get_object_or_404(
+        Service.objects.select_related('provider').exclude(provider__company_name=''),
+        id=service_id,
+    )
     
     # Get provider statistics
     provider = service.provider
     provider_services = Service.objects.filter(provider=provider)
     total_bookings = Booking.objects.filter(service__provider=provider).count()
     completed_bookings = Booking.objects.filter(service__provider=provider, status='Completed').count()
-    
+
+    reviews_qs = (
+        ReviewRating.objects.filter(provider=provider, status=True)
+        .select_related('customer')
+        .order_by('-created_at')[:25]
+    )
+    rating_stats = ReviewRating.objects.filter(provider=provider, status=True).aggregate(
+        avg=Avg('rating'),
+        n=Count('id'),
+    )
+
     context = {
         'service': service,
         'provider': provider,
         'provider_services': provider_services,
         'total_bookings': total_bookings,
         'completed_bookings': completed_bookings,
+        'provider_reviews': reviews_qs,
+        'review_avg': rating_stats['avg'],
+        'review_count': rating_stats['n'] or 0,
     }
     return render(request, 'service_detail.html', context)
 
@@ -223,8 +333,8 @@ def get_category_providers(request, category, template):
     """Helper function to get providers for a specific service category"""
     providers = User.objects.filter(
         is_provider=True,
-        service__category=category
-    ).annotate(
+        service__category=category,
+    ).exclude(company_name='').annotate(
         service_count=Count('service', filter=Q(service__category=category)),
         total_bookings=Count('service__booking', filter=Q(service__booking__service__category=category)),
         completed_bookings=Count('service__booking',
@@ -232,8 +342,14 @@ def get_category_providers(request, category, template):
                                         service__booking__status='Completed')),
     ).distinct()
 
+    search_query = request.GET.get('search', '').strip()
+    provs_list = list(providers)
+    used_exact = False
+    if search_query:
+        provs_list, used_exact = match_exact_username(provs_list, search_query.lower())
+
     provider_list = []
-    for provider in providers:
+    for provider in provs_list:
         completed_bookings = Booking.objects.filter(
             service__provider=provider,
             service__category=category,
@@ -249,17 +365,19 @@ def get_category_providers(request, category, template):
             'total_earnings': total_earnings,
         })
 
-    # Search filter
-    search_query = request.GET.get('search', '')
-    if search_query:
-        provider_list = [p for p in provider_list if
-                        search_query.lower() in p['provider'].username.lower() or
-                        search_query.lower() in (p['provider'].first_name or '').lower() or
-                        search_query.lower() in (p['provider'].last_name or '').lower()]
+    if search_query and not used_exact:
+        provider_list = filter_providers_by_search(provider_list, search_query)
+
+    add_ratings_to_provider_items(provider_list)
+    company_groups = group_provider_items_by_company(provider_list)
 
     context = {
         'provider_list': provider_list,
+        'company_groups': company_groups,
         'search_query': search_query,
         'category': category,
     }
     return render(request, template, context)
+
+
+    

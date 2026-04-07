@@ -74,6 +74,16 @@
                         <textarea class="form-control" id="address" name="address" rows="3" 
                                   placeholder="Enter your address">{{ user.address }}</textarea>
                     </div>
+
+                    {% if user.is_provider %}
+                    <div class="mb-3">
+                        <label for="company_name" class="form-label">Company / business name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" maxlength="200"
+                               value="{{ user.company_name }}" required
+                               placeholder="Shown to customers when they book your services">
+                        <div class="form-text">Customers see this on booking pages and service listings.</div>
+                    </div>
+                    {% endif %}
                     
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Cancel</a>

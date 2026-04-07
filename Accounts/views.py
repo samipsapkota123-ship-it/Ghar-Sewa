@@ -34,6 +34,13 @@ def register(request):
         elif not role or role not in ['customer', 'provider']:
             error = "Please select a valid role."
 
+        company_name = request.POST.get('company_name', '').strip()
+        if role == 'provider':
+            if not company_name:
+                error = "Company name is required for service providers."
+            elif len(company_name) < 2:
+                error = "Company name must be at least 2 characters long."
+
         if error:
             return render(request, 'register.html', {
                 'error': error,
@@ -53,6 +60,7 @@ def register(request):
                 user.is_customer = True
             else:
                 user.is_provider = True
+                user.company_name = company_name
             user.save()
 
             # If provider, create services
@@ -132,7 +140,13 @@ def edit_profile(request):
         user.email = request.POST.get('email', '').strip()
         user.phone_number = request.POST.get('phone_number', '').strip()
         user.address = request.POST.get('address', '').strip()
-        
+        if user.is_provider:
+            cn = request.POST.get('company_name', '').strip()
+            if not cn or len(cn) < 2:
+                messages.error(request, 'Company name is required and must be at least 2 characters.')
+                return render(request, 'edit_profile.html', {'user': user})
+            user.company_name = cn
+
         # Handle profile picture upload
         if 'profile_picture' in request.FILES:
             user.profile_picture = request.FILES['profile_picture']

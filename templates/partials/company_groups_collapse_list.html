@@ -1,0 +1,28 @@
+{# Expects: company_groups, collapse_id_prefix, company_header_class, provider_card_header_class, services_heading #}
+{% if company_groups %}
+{% for company_data in company_groups %}
+<div class="card mb-3 shadow-sm border-0">
+    <div class="card-header {{ company_header_class }} d-flex justify-content-between align-items-center py-3"
+         role="button" tabindex="0" style="cursor: pointer;"
+         data-bs-toggle="collapse" data-bs-target="#{{ collapse_id_prefix }}-co-{{ forloop.counter0 }}"
+         aria-expanded="false" aria-controls="{{ collapse_id_prefix }}-co-{{ forloop.counter0 }}">
+        <div>
+            <h5 class="mb-0"><i class="bi bi-building"></i> {{ company_data.company_name }}</h5>
+            <small class="opacity-75">{{ company_data.providers|length }} provider{{ company_data.providers|length|pluralize }} — tap to view</small>
+        </div>
+        <i class="bi bi-chevron-down"></i>
+    </div>
+    <div id="{{ collapse_id_prefix }}-co-{{ forloop.counter0 }}" class="collapse">
+        <div class="card-body bg-light border border-top-0 rounded-bottom">
+            <div class="row">
+                {% for item in company_data.providers %}
+                <div class="col-md-6 mb-4">
+                    {% include 'partials/provider_category_card.html' with item=item header_class=provider_card_header_class services_heading=services_heading %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}

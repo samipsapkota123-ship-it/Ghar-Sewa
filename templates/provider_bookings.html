@@ -91,6 +91,7 @@
                         <th>Payment Method</th>
                         <th>Payment Status</th>
                         <th>Fee</th>
+                        <th>Customer review</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -157,6 +158,28 @@
 
                         <td>
                             <strong class="text-success">RS.{{ booking.service.price }}</strong>
+                        </td>
+
+                        <td style="min-width: 160px;">
+                            {% if booking.review %}
+                            <div class="small">
+                                <span class="text-warning fw-semibold">
+                                    <i class="bi bi-star-fill"></i> {{ booking.review.rating|floatformat:1 }} / 5
+                                </span>
+                                {% if booking.review.subject %}
+                                <div class="fw-semibold mt-1">{{ booking.review.subject }}</div>
+                                {% endif %}
+                                {% if booking.review.review %}
+                                <p class="text-muted mb-0 mt-1" style="max-width: 220px;">{{ booking.review.review|truncatewords:25 }}</p>
+                                {% endif %}
+                                <div class="text-muted mt-1" style="font-size: 0.75rem;">
+                                    <i class="bi bi-person"></i> {{ booking.customer.username }}
+                                    · {{ booking.review.created_at|date:"M j, Y" }}
+                                </div>
+                            </div>
+                            {% else %}
+                            <span class="text-muted small">No review yet</span>
+                            {% endif %}
                         </td>
 
                         <td>

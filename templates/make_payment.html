@@ -18,8 +18,8 @@
               <td>{{ booking.service.name }}</td>
             </tr>
             <tr>
-              <th>Provider</th>
-              <td>{{ booking.service.provider.username }}</td>
+              <th>Company / Provider</th>
+              <td>{% if booking.service.provider.company_name %}<strong><i class="bi bi-building"></i> {{ booking.service.provider.company_name }}</strong><br>{% endif %}<span class="text-muted">{{ booking.service.provider.username }}</span></td>
             </tr>
             <tr>
               <th>Date</th>

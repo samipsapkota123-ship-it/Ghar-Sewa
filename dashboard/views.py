@@ -57,7 +57,8 @@ def users_list(request):
     if search_query:
         users = users.filter(
             Q(username__icontains=search_query) |
-            Q(email__icontains=search_query)
+            Q(email__icontains=search_query) |
+            Q(company_name__icontains=search_query)
         )
     
     if role_filter == 'customer':
@@ -85,7 +86,8 @@ def services_list(request):
     if search_query:
         services = services.filter(
             Q(name__icontains=search_query) |
-            Q(provider__username__icontains=search_query)
+            Q(provider__username__icontains=search_query) |
+            Q(provider__company_name__icontains=search_query)
         )
     
     if category_filter:
@@ -208,7 +210,8 @@ def view_providers(request):
     if search_query:
         providers = providers.filter(
             Q(username__icontains=search_query) |
-            Q(email__icontains=search_query)
+            Q(email__icontains=search_query) |
+            Q(company_name__icontains=search_query)
         )
     
     providers = providers.order_by('-id')

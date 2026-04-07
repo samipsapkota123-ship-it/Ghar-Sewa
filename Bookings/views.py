@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views import View
 from django.http import HttpResponseBadRequest
 from django.urls import reverse
-from .models import Booking
+from .models import Booking, ReviewRating
 from Services.models import Service
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Sum
@@ -14,7 +14,10 @@ from .esewa_signature import genSha256
 
 @login_required
 def book_service(request, service_id):
-    service = get_object_or_404(Service.objects.select_related('provider'), id=service_id)
+    service = get_object_or_404(
+        Service.objects.select_related('provider').exclude(provider__company_name=''),
+        id=service_id,
+    )
 
     if request.method == 'POST':
         date = request.POST.get('date')
@@ -52,7 +55,12 @@ def book_service(request, service_id):
 
 @login_required
 def my_bookings(request):
-    bookings = Booking.objects.filter(customer=request.user).select_related('service', 'service__provider').order_by('-date', '-time')
+    bookings = (
+        Booking.objects.filter(customer=request.user)
+        .select_related('service', 'service__provider')
+        .annotate(review_count=Count('review'))
+        .order_by('-date', '-time')
+    )
     return render(request, 'my_bookings.html', {'bookings': bookings})
 
 @login_required
@@ -65,8 +73,12 @@ def provider_bookings(request):
     # Get all services owned by this provider
     my_services = Service.objects.filter(provider=request.user)
     
-    # Get all bookings for these services
-    bookings = Booking.objects.filter(service__in=my_services).select_related('customer', 'service').order_by('-date', '-time')
+    # Get all bookings for these services (include customer review when present)
+    bookings = (
+        Booking.objects.filter(service__in=my_services)
+        .select_related('customer', 'service', 'review')
+        .order_by('-date', '-time')
+    )
     
     # Statistics
     total_bookings = bookings.count()
@@ -277,3 +289,52 @@ def esewa_verify_booking(request, booking_id):
 
 def payment_failed(request):
     return render(request, "bookings/payment_failed.html")
+
+@login_required
+def add_review(request, booking_id):
+    booking = get_object_or_404(
+        Booking.objects.select_related('service', 'service__provider'),
+        id=booking_id,
+        customer=request.user,
+    )
+
+    if booking.status != 'Completed':
+        messages.error(request, 'You can only review completed bookings.')
+        return redirect('my_bookings')
+
+    if booking.payment_status not in ('Paid', 'Received'):
+        messages.error(request, 'Complete payment before leaving a review.')
+        return redirect('my_bookings')
+
+    if ReviewRating.objects.filter(booking=booking).exists():
+        messages.info(request, 'You have already submitted a review for this booking.')
+        return redirect('my_bookings')
+
+    if request.method == 'POST':
+        subject = (request.POST.get('subject') or '').strip()
+        review_text = (request.POST.get('review') or '').strip()
+        rating_raw = request.POST.get('rating')
+
+        try:
+            rating_val = float(rating_raw)
+        except (TypeError, ValueError):
+            messages.error(request, 'Please select a valid star rating.')
+            return render(request, 'add_review.html', {'booking': booking})
+
+        if rating_val < 0.5 or rating_val > 5:
+            messages.error(request, 'Rating must be between 0.5 and 5.')
+            return render(request, 'add_review.html', {'booking': booking})
+
+        ReviewRating.objects.create(
+            provider=booking.service.provider,
+            customer=request.user,
+            booking=booking,
+            subject=subject,
+            review=review_text,
+            rating=rating_val,
+            ip=request.META.get('REMOTE_ADDR', '')[:20],
+        )
+        messages.success(request, 'Thank you — your review was saved.')
+        return redirect('my_bookings')
+
+    return render(request, 'add_review.html', {'booking': booking})

@@ -1,0 +1,7 @@
+{# Company first, then provider username — use where a compact identity block is needed. #}
+{% if provider.company_name %}
+<div class="fw-bold text-primary mb-1"><i class="bi bi-building"></i> {{ provider.company_name }}</div>
+{% endif %}
+<div class="{% if provider.company_name %}small text-muted{% else %}fw-semibold{% endif %}">
+  {% if provider.company_name %}<span class="text-muted">Provider</span> · {% endif %}{{ provider.username }}
+</div>

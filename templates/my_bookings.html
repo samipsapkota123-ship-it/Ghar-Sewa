@@ -16,8 +16,8 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
+            <table class="table table-hover align-middle text-nowrap">
+                <thead class="table-light">
                     <tr>
                         <th>ID</th>
                         <th>Service</th>
@@ -41,11 +41,15 @@
 
                         <td>{{ b.service.name }}</td>
 
+                        <!-- ✅ FIXED PROVIDER COLUMN -->
                         <td>
-                            {{ b.service.provider.username }}
-                            {% if b.service.provider.phone_number %}
-                            <br>
+                            {% if b.service.provider.company_name %}
+                                <strong>
+                                    <i class="bi bi-building"></i>
+                                    {{ b.service.provider.company_name }}
+                                </strong><br>
                             {% endif %}
+                            <span class="text-muted">{{ b.service.provider.username }}</span>
                         </td>
 
                         <td>
@@ -76,10 +80,11 @@
                             {% elif b.status == 'Completed' %}
                                 <span class="badge bg-success">Completed</span>
                             {% elif b.status == 'Not Available' %}
-                                <span class="badge bg-danger">Not Available</span>
+                                <span class="badge bg-danger">Cancelled</span>
                             {% endif %}
                         </td>
 
+                        <!-- Payment Method -->
                         <td>
                             <span class="badge bg-secondary">{{ b.payment_method }}</span>
                         </td>
@@ -101,36 +106,46 @@
                             {% endif %}
                         </td>
 
+                        <!-- Amount -->
                         <td>
                             <strong class="text-success">Rs. {{ b.service.price }}</strong>
                         </td>
 
-                        <!-- Actions -->
+                        <!-- ✅ ACTIONS WITH REVIEW BUTTON -->
                         <td>
                             {% if b.status == 'Not Available' %}
                                 <span class="text-danger small">
-                                    <i class="bi bi-x-circle"></i>  Cancelled
+                                    <i class="bi bi-x-circle"></i> Cancelled
                                 </span>
 
                             {% elif b.payment_status == 'Pending' %}
                                 <a href="{% url 'make_payment' b.id %}" class="btn btn-sm btn-success">
-                                    <i class="bi bi-credit-card"></i> Make Payment
+                                    <i class="bi bi-credit-card"></i> Pay
                                 </a>
 
-                            {% elif b.payment_status == 'Paid' %}
-                                <span class="text-success small">
-                                    <i class="bi bi-check-circle"></i> Payment Completed
-                                </span>
+                            {% elif b.payment_status == 'Paid' or b.payment_status == 'Received' %}
 
-                            {% elif b.payment_status == 'Received' %}
-                                <span class="text-success small">
-                                    <i class="bi bi-check-circle"></i> Payment Received
-                                </span>
+                                {% if b.status == 'Completed' %}
+                                    {% if b.review_count %}
+                                    <span class="text-muted small">
+                                        <i class="bi bi-star-fill text-warning"></i> Reviewed
+                                    </span>
+                                    {% else %}
+                                    <a href="{% url 'add_review' b.id %}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-star"></i> Review
+                                    </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-success small">
+                                        <i class="bi bi-check-circle"></i> Paid
+                                    </span>
+                                {% endif %}
 
                             {% else %}
                                 <span class="text-muted small">-</span>
                             {% endif %}
                         </td>
+
                     </tr>
                     {% endfor %}
                 </tbody>

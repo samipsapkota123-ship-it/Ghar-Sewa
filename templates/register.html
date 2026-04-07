@@ -102,6 +102,24 @@
           <!-- Service Provider Fields -->
           <div id="providerFields" style="display: none">
             <hr class="my-4" />
+            <h5 class="mb-3">Company</h5>
+            <div class="mb-3">
+              <label for="company_name" class="form-label"
+                >Company / business name <span class="text-danger">*</span></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="company_name"
+                name="company_name"
+                maxlength="200"
+                placeholder="e.g., ABC Home Services Pvt. Ltd."
+              />
+              <div class="form-text">
+                Bookings are shown only for providers associated with a company.
+                Customers will see this name when they book.
+              </div>
+            </div>
             <h5 class="mb-3">Add Your Services</h5>
             <p class="text-muted small">
               Add at least one service you want to provide. You can add more
@@ -173,11 +191,14 @@
   function toggleServiceFields() {
     const role = document.getElementById("role").value;
     const providerFields = document.getElementById("providerFields");
+    const companyInput = document.getElementById("company_name");
 
     if (role === "provider") {
       providerFields.style.display = "block";
+      if (companyInput) companyInput.required = true;
     } else {
       providerFields.style.display = "none";
+      if (companyInput) companyInput.required = false;
     }
   }
 

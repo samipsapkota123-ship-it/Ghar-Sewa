@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="row pt-4">
     <!-- Service Details -->
@@ -120,6 +121,33 @@
                 </div>
             </div>
         </div>
+
+        {% if review_count %}
+        <div class="card shadow mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-star-half"></i> Customer reviews</h5>
+                <small class="fw-normal">
+                    Average <strong>{{ review_avg|floatformat:1 }}</strong> / 5
+                    based on {{ review_count }} review{{ review_count|pluralize }}
+                </small>
+            </div>
+            <div class="card-body">
+                {% for r in provider_reviews %}
+                <div class="{% if not forloop.last %}border-bottom pb-3 mb-3{% endif %}">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <span class="text-warning fw-semibold"><i class="bi bi-star-fill"></i> {{ r.rating|floatformat:1 }} / 5</span>
+                        <small class="text-muted">{{ r.created_at|date:"M j, Y" }}</small>
+                    </div>
+                    {% if r.subject %}<div class="fw-semibold">{{ r.subject }}</div>{% endif %}
+                    {% if r.review %}<p class="mb-1 small text-muted">{{ r.review }}</p>{% endif %}
+                    <small class="text-muted">
+                        {% if r.customer %}— {{ r.customer.username }}{% else %}— Verified customer{% endif %}
+                    </small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Provider Information -->
@@ -141,7 +169,10 @@
                         </div>
                     {% endif %}
                 </div>
-                <h5 class="text-center mb-1">{{ provider.username }}</h5>
+                {% if provider.company_name %}
+                <h5 class="text-center mb-1"><i class="bi bi-building"></i> {{ provider.company_name }}</h5>
+                {% endif %}
+                <p class="text-center {% if provider.company_name %}text-muted small mb-2{% else %}mb-1{% endif %}">{{ provider.username }}</p>
                 {% if provider.first_name or provider.last_name %}
                 <p class="text-center text-muted mb-3">
                     {{ provider.first_name }} {{ provider.last_name }}
@@ -175,6 +206,15 @@
                             <strong>Completed:</strong> 
                             <span class="badge bg-success">{{ completed_bookings }}</span>
                         </li>
+                        {% if review_count %}
+                        <li class="mb-2">
+                            <strong>Average rating:</strong>
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-star-fill"></i> {{ review_avg|floatformat:1 }} / 5
+                            </span>
+                            <small class="text-muted">({{ review_count }} review{{ review_count|pluralize }})</small>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="pt-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <div>
+            <h2 class="mb-1"><i class="bi bi-chat-square-text"></i> Customer reviews</h2>
+            <p class="text-muted mb-0">
+                {% if provider.company_name %}
+                <i class="bi bi-building"></i> {{ provider.company_name }}
+                <span class="text-muted">·</span>
+                {% endif %}
+                <i class="bi bi-person-badge"></i> {{ provider.username }}
+            </p>
+        </div>
+        <a href="{% url 'service_providers' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to providers
+        </a>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body d-flex flex-wrap align-items-center gap-3">
+            {% if review_count %}
+            <div class="fs-3 text-warning mb-0"><i class="bi bi-star-fill"></i></div>
+            <div>
+                <div class="h4 mb-0">{{ review_avg|floatformat:1 }} <span class="text-muted fs-6 fw-normal">/ 5</span></div>
+                <small class="text-muted">Average from {{ review_count }} review{{ review_count|pluralize }}</small>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No reviews yet for this provider.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if reviews %}
+    <div class="list-group shadow-sm">
+        {% for r in reviews %}
+        <div class="list-group-item list-group-item-action py-3">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                <span class="text-warning fw-semibold">
+                    <i class="bi bi-star-fill"></i> {{ r.rating|floatformat:1 }} / 5
+                </span>
+                <small class="text-muted">{{ r.created_at|date:"F j, Y" }}</small>
+            </div>
+            {% if r.subject %}
+            <div class="fw-semibold mb-1">{{ r.subject }}</div>
+            {% endif %}
+            {% if r.review %}
+            <p class="mb-2 text-muted small">{{ r.review }}</p>
+            {% endif %}
+            <div class="small text-muted">
+                <i class="bi bi-person"></i>
+                {% if r.customer %}{{ r.customer.username }}{% else %}Customer{% endif %}
+                {% if r.booking and r.booking.service %}
+                <span class="mx-1">·</span>
+                <i class="bi bi-briefcase"></i> {{ r.booking.service.name }}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% elif review_count == 0 %}
+    <div class="alert alert-light border text-center">
+        Reviews will appear here after customers complete bookings and submit ratings.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

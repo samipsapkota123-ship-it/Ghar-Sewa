@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    service_list, service_providers, service_detail, toggle_service_availability,
+    service_list, service_providers, provider_customer_reviews, service_detail, toggle_service_availability,
     plumbing_services, electrical_services, cleaning_services, painting_services,
     appliance_repair_services, handyman_services,
     plumbing_providers, electrical_providers, cleaning_providers, painting_providers,
@@ -10,6 +10,11 @@ from .views import (
 urlpatterns = [
     path('', service_list, name='services'),
     path('providers/', service_providers, name='service_providers'),
+    path(
+        'providers/<int:provider_id>/reviews/',
+        provider_customer_reviews,
+        name='provider_customer_reviews',
+    ),
     path('<int:service_id>/', service_detail, name='service_detail'),
     path('<int:service_id>/toggle-availability/', toggle_service_availability, name='toggle_service_availability'),
 
@@ -28,4 +33,5 @@ urlpatterns = [
     path('painting/providers/', painting_providers, name='painting_providers'),
     path('appliance-repair/providers/', appliance_repair_providers, name='appliance_repair_providers'),
     path('handyman/providers/', handyman_providers, name='handyman_providers'),
+   
 ]

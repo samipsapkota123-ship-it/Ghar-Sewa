@@ -35,3 +35,37 @@ class Booking(models.Model):
     payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
     payment_cancel = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Failed')
     payment_received = models.BooleanField(default=False, help_text="Mark as received by provider")
+
+class ReviewRating(models.Model):
+    provider = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='received_reviews',
+    )
+    customer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='given_reviews',
+        null=True,
+        blank=True,
+    )
+    booking = models.OneToOneField(
+        Booking,
+        on_delete=models.CASCADE,
+        related_name='review',
+        null=True,
+        blank=True,
+    )
+    subject = models.CharField(max_length=100, blank=True)
+    review = models.TextField(max_length=500, blank=True)
+    rating = models.FloatField()
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.subject or f'Review #{self.pk}'

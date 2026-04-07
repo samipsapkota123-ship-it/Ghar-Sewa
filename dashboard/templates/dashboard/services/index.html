@@ -14,7 +14,7 @@
             <div class="col-md-6">
                 <label for="search" class="form-label">Search Services</label>
                 <input type="text" class="form-control" id="search" name="search" 
-                       value="{{ search_query }}" placeholder="Search by service name or provider...">
+                       value="{{ search_query }}" placeholder="Search by service name, provider, or company...">
             </div>
             <div class="col-md-4">
                 <label for="category" class="form-label">Filter by Category</label>
@@ -54,7 +54,7 @@
                         <th>Service Name</th>
                         <th>Category</th>
                         <th>Price</th>
-                        <th>Provider</th>
+                        <th>Provider / Company</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -74,6 +74,9 @@
                                class="text-decoration-none">
                                 {{ service.provider.username }}
                             </a>
+                            {% if service.provider.company_name %}
+                            <br><small class="text-muted"><i class="bi bi-building"></i> {{ service.provider.company_name }}</small>
+                            {% endif %}
                         </td>
                         <td>
                             <form method="post" action="{% url 'dashboard_delete_service' service.id %}" 

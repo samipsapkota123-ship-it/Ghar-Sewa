@@ -1,0 +1,18 @@
+services:
+
+  postgres_db:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB : gharsewa_db
+    volumes:
+      - postgres_data:/var/lib/postgressql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data: 
+ 

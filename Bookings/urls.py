@@ -9,6 +9,7 @@ from .views import (
     EsewaBookingView,
     esewa_verify_booking,
     payment_failed,
+    add_review,
    
 )
 
@@ -39,6 +40,7 @@ urlpatterns = [
     name='esewa_verify_booking',
 ),
     
-    path("payment-failed/", payment_failed, name="payment_failed")
+    path("payment-failed/", payment_failed, name="payment_failed"),
+     path('review/<int:booking_id>/', add_review, name='add_review'),
 
 ]
