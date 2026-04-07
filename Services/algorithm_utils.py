@@ -18,7 +18,6 @@ T = TypeVar('T')
 def get_rating_summary_for_providers(provider_ids: Sequence[int]) -> dict[int, dict]:
     """
     Data harvesting : one DB query for all providers’ rating stats.
-
     Returns { provider_id: {'avg': float|None, 'n': int}, ... }.
     """
     if not provider_ids:
@@ -32,7 +31,7 @@ def get_rating_summary_for_providers(provider_ids: Sequence[int]) -> dict[int, d
 
 
 def add_ratings_to_provider_items(items: List[dict]) -> None:
-    """Data harvesting (5.4.1): merge harvested summaries into each provider item dict."""
+    """Data harvesting : merge harvested summaries into each provider item dict."""
     if not items:
         return
     ids = list({item['provider'].id for item in items})
@@ -78,7 +77,6 @@ def binary_search(sorted_seq: Sequence[T], target: T) -> int:
 def match_exact_username(providers: Sequence, search_lower: str) -> tuple[list, bool]:
     """
     Binary search : sort usernames, then binary_search for an exact case-insensitive match.
-
     If found: return ([that user], True). Else: return (full list, False) for filtering (5.4.3).
     """
     plist = list(providers)
